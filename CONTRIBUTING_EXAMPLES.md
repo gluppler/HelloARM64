@@ -1,5 +1,3 @@
----
-
 # Contributing Examples – ARM64
 
 This file shows small code snippets that demonstrate how to follow our coding principles when contributing to this repository.
