@@ -67,7 +67,7 @@ HelloARM64/
 │   │   ├── main.c
 │   │   └── Makefile
 │   ├── 03_debugging/
-│   └── projects/            # Larger systems-level exercises
+│   └── projects/
 │       ├── strlen/
 │       │   ├── strlen.s
 │       │   ├── main.c
@@ -75,14 +75,16 @@ HelloARM64/
 │       └── factorial.s
 │
 ├── examples/                # Sample assembly programs
-│   └── hello_world.s
+│   ├── hello_world.s
+│   ├── hello_world_c.s
+│   └── hello_world_c.c
 │
 └── tools/                   # Helper scripts/configs
-    ├── build.sh             # Universal build+run (file or folder, supports --bare, --debug)
-    ├── debug.sh             # Shortcut: build + launch LLDB
-    ├── debug.lldb           # Auto-run LLDB commands (regs, disasm, tracer aliases)
-    ├── clean.sh             # Clean up bin/ and temp files
-    └── run.sh               # Run a binary from bin/ by name
+    ├── build.sh
+    ├── debug.sh
+    ├── debug.lldb
+    ├── clean.sh
+    └── run.sh
 ```
 
 ---
@@ -167,6 +169,30 @@ HelloARM64/
 
 ---
 
+## 🔑 Naming Rule on macOS ARM64
+
+On macOS, the **Mach-O ABI** requires all global symbols to have a **leading underscore**.
+
+* In **assembly**:
+
+  ```asm
+  .global _foo
+  _foo:
+      ret
+  ```
+* In **C code**:
+
+  ```c
+  extern long foo(void);  // notice: no underscore in C
+  ```
+
+✅ Always remember:
+
+* **Track 1**: Use `_start` (bare entry) or `_main` (system entry).
+* **Track 2**: Functions must be `_funcname` in assembly, `funcname` in C.
+
+---
+
 ## 🛠 LLDB Tracer (Debugging Helper)
 
 Inside LLDB, you now have extra commands:
@@ -176,12 +202,63 @@ Inside LLDB, you now have extra commands:
 * `rr` → read all registers manually
 * `di` → disassemble around current PC
 
-By default, whenever the program stops (breakpoint or step), LLDB will:
+By default, whenever the program stops, LLDB will:
 
 * Show register state
-* Show 10 instructions around the current PC
+* Show 10 instructions around current PC
 
-This makes stepping through ARM64 assembly much easier.
+---
+
+## 📝 ARM64 + macOS ABI Cheatsheet
+
+**Registers**
+
+* `x0–x7` → function arguments (1st arg in `x0`, 2nd in `x1`, etc.)
+* `x0` → return value register
+* `x8` → indirect result pointer
+* `x9–x15` → temporaries (caller-saved)
+* `x19–x28` → callee-saved registers (must be preserved)
+* `x29` → frame pointer
+* `x30` → link register (return address)
+* `sp` → stack pointer
+
+**Stack Alignment**
+
+* Must be 16-byte aligned at function calls.
+
+**Syscalls (bare-metal track only)**
+
+* `x16` → syscall number
+* `x0–x2` → syscall args (fd, buffer, size, etc.)
+* `svc #0` → trigger kernel call
+
+**Symbol Rules**
+
+* `_foo` in assembly ↔ `foo()` in C
+* Prefix all assembly globals with `_` for interop
+
+**Exit codes**
+
+* Bare-metal: explicit `exit` syscall.
+* Systems: return in `x0` and `ret`; libc calls `exit(x0)`.
+
+**Interop Example**
+
+```c
+// C file
+extern long add_two(long x, long y);
+int main() {
+    return (int)add_two(7, 3);
+}
+```
+
+```asm
+// Assembly file
+.global _add_two
+_add_two:
+    add x0, x0, x1
+    ret
+```
 
 ---
 
@@ -189,63 +266,30 @@ This makes stepping through ARM64 assembly much easier.
 
 ### Always getting exit code `0`
 
-* If you’re using `_main` and `ret`, the runtime may swallow your return value.
-* Fix:
-
-  * Use `_start` with `--bare` mode (`make bare_build`) for true bare-metal exit control.
-  * Or return via `ret` in `_main` **without syscalls**, so libc calls `exit()` correctly.
+* If using `_main`, libc may swallow return value.
+* Use `_start` in bare-metal, or `ret` in `_main` so libc calls `exit(x0)`.
 
 ### `lldb: error: invalid combination of options`
 
-* Old LLDB script used `disassemble -f -n`. Fixed with `disassemble -a $pc -c 10`.
-* Update your `tools/debug.lldb`.
+* Fixed by using `disassemble -a $pc -c 10`.
 
 ### Rosetta / x86\_64 interference
 
-* Ensure you are compiling for `arm64`. Run `file bin/hello_world` to confirm.
-* If you see `x86_64`, you are running under Rosetta. Use:
+* Confirm binary arch with `file bin/hello_world`.
+* If wrong, force build with `arch -arm64`.
 
-  ```bash
-  arch -arm64 ./tools/build.sh ...
-  ```
+### Permissions
 
-### `clang: command not found`
-
-* Install Xcode command-line tools:
-
-  ```bash
-  xcode-select --install
-  ```
-
-### Permission denied on tools
-
-* Make sure scripts are executable:
-
-  ```bash
-  chmod +x tools/*.sh
-  ```
-
-### LLDB doesn’t break at `_start`
-
-* If you built with `--bare`, your entry point is `_start`.
-* If you built normally, your entry point is `_main`.
-* LLDB script sets breakpoints on both, so one of them should hit.
-
-### String printing doesn’t work
-
-* macOS uses Mach syscalls, not Linux syscall numbers.
-* Example:
-
-  * Exit = `0x2000001`
-  * Write = `0x2000004`
-* Check you’re using the right constants.
+```bash
+chmod +x tools/*.sh
+```
 
 ---
 
 ## 📚 References
 
 * [ARM Architecture Reference Manual (ARMv8-A)](https://developer.arm.com/documentation/ddi0487/latest)
-* [Apple Developer Documentation: Assembly Language](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms)
+* [Apple Developer: Writing ARM64 Code](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms)
 * [LLVM/Clang ARM64 Docs](https://clang.llvm.org/docs/Arm.html)
 * [LLDB Command Guide](https://lldb.llvm.org/use/map.html)
 
@@ -257,6 +301,7 @@ This makes stepping through ARM64 assembly much easier.
 * Learn how macOS expects functions, arguments, and syscalls to work.
 * Build small but meaningful assembly programs in both contexts.
 * Explore Apple Silicon at the lowest level for fun and mastery.
+
 
 
 
