@@ -119,10 +119,4 @@ make run
 * Build small but meaningful assembly programs in both contexts.
 * Explore Apple Silicon at the lowest level for fun and mastery.
 
-```
-
----
-
-Would you like me to also make the **starter `Makefile` + `hello.s`** for both `baremetal/00_registers/` and `systems/00_hello_syscall/` so the repo is runnable right away?
-```
 
