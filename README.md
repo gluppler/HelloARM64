@@ -288,9 +288,9 @@ chmod +x tools/*.sh
 
 ## 📚 References
 
-- [LLVM Clang Compiler User Manual](https://clang.llvm.org/docs/UsersManual.html) — Comprehensive guide to Clang usage and options :contentReference[oaicite:0]{index=0}  
-- [LLVM Download & Documentation](https://releases.llvm.org/download.html) — Central hub for LLVM and Clang releases and documentation :contentReference[oaicite:1]{index=1}  
-- [ARM C/C++ Compiler (Clang/LLVM-based)](https://developer.arm.com/documentation/101458/latest/Supporting-reference-information/Clang-and-LLVM-documentation) — ARM-specific insights on the Clang/LLVM toolchain :contentReference[oaicite:2]{index=2}  
+- [LLVM Clang Compiler User Manual](https://clang.llvm.org/docs/UsersManual.html) 
+- [LLVM Download & Documentation](https://releases.llvm.org/download.html) 
+- [ARM C/C++ Compiler (Clang/LLVM-based)](https://developer.arm.com/documentation/101458/latest/Supporting-reference-information/Clang-and-LLVM-documentation) 
 - [ARM Architecture Reference Manual (ARMv8-A)](https://developer.arm.com/documentation/ddi0487/latest)  
 - [Apple Developer: Writing ARM64 Code for Apple Platforms](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms)  
 - [LLDB Command Guide](https://lldb.llvm.org/use/map.html)
