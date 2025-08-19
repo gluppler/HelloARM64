@@ -1,308 +1,234 @@
 # HelloARM64
 
-Learning ARM64 (AArch64) programming on Apple Silicon.  
+Learn ARM64 (AArch64) programming on both **Linux** and **macOS (Apple Silicon)**.  
+This project is organized into two parallel **tracks**:
 
-This project is split into two parallel tracks:
-
-- **Bare-Metal Track** → Learning how the CPU itself works: registers, instructions, memory, and control flow, without depending on an operating system. Uses `_start` as the entry point and direct syscalls.  
-- **Systems-Level Track** → Writing ARM64 assembly that works with macOS: system calls, C interop, and debugging with LLDB. Uses `_main` and links with the C runtime.  
-
-The goal is to understand ARM64 from both the *hardware-first* and *OS-aware* perspectives.
-
----
-
-## ⚡ Quick Start
-
-```bash
-# 1. Clone the repo
-git clone https://github.com/yourusername/HelloARM64.git
-cd HelloARM64
-
-# 2. Make scripts executable (one-time)
-chmod +x tools/build.sh tools/debug.sh tools/clean.sh tools/run.sh
-
-# 3. Build and run the sample Hello World (runtime mode)
-./tools/build.sh examples/hello_world.s
-
-# 4. (Optional) Run in bare-metal mode (no libc)
-./tools/build.sh examples/hello_world.s --bare
-
-# 5. (Optional) Debug with LLDB tracer
-./tools/build.sh examples/hello_world.s --bare --debug
-````
-
-Expected output:
-
-```
-Hello, world!
-```
+- **Bare-metal track**: pure assembly with direct syscalls, no libc.
+- **Systems track**: assembly + C interop to build realistic userland programs.
 
 ---
 
 ## 📂 Project Structure
 
 ```
+
 HelloARM64/
-├── README.md
-├── Makefile                 # Root makefile (wrapping tools/)
-│
-├── baremetal/               # Track 1: CPU-only thinking
-│   ├── 00_registers/
-│   │   ├── registers.s
-│   │   └── Makefile
-│   ├── 01_arithmetic/
-│   ├── 02_memory/
-│   ├── 03_functions/
-│   └── projects/            # Larger bare-metal exercises
-│       ├── fibonacci.s
-│       └── bubblesort.s
-│
-├── systems/                 # Track 2: macOS + assembly
-│   ├── 00_hello_syscall/
-│   │   ├── hello.s
-│   │   └── Makefile
-│   ├── 01_calling_convention/
-│   ├── 02_mixing_c/         # C <-> Assembly interop
-│   │   ├── asm_func.s
-│   │   ├── main.c
-│   │   └── Makefile
-│   ├── 03_debugging/
-│   └── projects/
-│       ├── strlen/
-│       │   ├── strlen.s
-│       │   ├── main.c
-│       │   └── Makefile
-│       └── factorial.s
-│
-├── examples/                # Sample assembly programs
-│   ├── hello_world.s
-│   ├── hello_world_c.s
-│   └── hello_world_c.c
-│
-└── tools/                   # Helper scripts/configs
-    ├── build.sh
-    ├── debug.sh
-    ├── debug.lldb
-    ├── clean.sh
-    └── run.sh
-```
+├── baremetal/           # Low-level assembly lessons
+│    ├── 00\_registers/
+│    ├── 01\_arithmetic/
+│    └── ...
+├── examples/
+│    ├── hello\_world/
+│    │    ├── hello\_world\_bare\_linux.s
+│    │    ├── hello\_world\_bare\_macos.s
+│    │    ├── hello\_world\_sys\_linux.s
+│    │    ├── hello\_world\_sys\_linux.c
+│    │    ├── hello\_world\_sys\_macos.s
+│    │    ├── hello\_world\_sys\_macos.c
+│    │    └── README.md
+│    └── ...
+├── tools/
+│    ├── build.sh        # Unified build script (Linux + macOS)
+│    ├── debug.lldb      # Debug setup for macOS
+│    └── (future Linux debug configs)
+├── Makefile             # Frontend for build.sh
+└── README.md            # (this file)
+
+````
 
 ---
 
-## 🚀 Building & Running
+## ⚙️ Toolchain
 
-### Using Tools
+### macOS (Apple Silicon)
+- `clang` (built-in)
+- `lldb` (debugger)
 
-* Build & run normally (`_main` + libc exit):
+### Linux (AArch64)
+- `aarch64-linux-gnu-gcc` or `clang --target=aarch64-linux-gnu`
+- `qemu-aarch64` (to run Linux binaries from macOS)
+- `gdb-multiarch` (optional debugger for Linux)
 
-  ```bash
-  ./tools/build.sh baremetal/00_registers/registers.s
-  ```
-* Build & run bare-metal (`_start` + direct syscalls):
-
-  ```bash
-  ./tools/build.sh baremetal/00_registers/registers.s --bare
-  ```
-* Debug with LLDB tracer:
-
-  ```bash
-  ./tools/build.sh baremetal/00_registers/registers.s --bare --debug
-  ```
-* Clean all binaries:
-
-  ```bash
-  ./tools/clean.sh
-  ```
-
-### Using Root Makefile
-
-* Build:
-
-  ```bash
-  make build file=examples/hello_world.s
-  ```
-* Debug:
-
-  ```bash
-  make debug file=examples/hello_world.s
-  ```
-* Bare-metal build:
-
-  ```bash
-  make bare_build file=baremetal/00_registers/registers.s
-  ```
-* Bare-metal debug:
-
-  ```bash
-  make bare_debug file=baremetal/00_registers/registers.s
-  ```
-* Run:
-
-  ```bash
-  make run file=examples/hello_world.s
-  ```
-* Clean:
-
-  ```bash
-  make clean
-  ```
+Install via Homebrew (macOS):
+```bash
+brew install qemu
+brew install llvm
+````
 
 ---
 
-## 🧭 Learning Path
+## ▶️ Building & Running
 
-### 🟢 Bare-Metal Track
-
-1. Registers & Instructions (`mov`, `add`, `sub`)
-2. Arithmetic & Control Flow (loops, comparisons)
-3. Memory (stack, load/store)
-4. Functions (arguments, return values)
-5. Projects (Fibonacci, Bubble Sort, etc.)
-
-### 🔵 Systems-Level Track
-
-1. Hello World with macOS syscall
-2. Calling Convention & ABI
-3. Mixing C & Assembly
-4. Debugging with LLDB
-5. Projects (`strlen`, factorial, etc.)
-
----
-
-## 🔑 Naming Rule on macOS ARM64
-
-On macOS, the **Mach-O ABI** requires all global symbols to have a **leading underscore**.
-
-* In **assembly**:
-
-  ```asm
-  .global _foo
-  _foo:
-      ret
-  ```
-* In **C code**:
-
-  ```c
-  extern long foo(void);  // notice: no underscore in C
-  ```
-
-✅ Always remember:
-
-* **Track 1**: Use `_start` (bare entry) or `_main` (system entry).
-* **Track 2**: Functions must be `_funcname` in assembly, `funcname` in C.
-
----
-
-## 🛠 LLDB Tracer (Debugging Helper)
-
-Inside LLDB, you now have extra commands:
-
-* `st` → step one instruction **with trace** (regs + disasm)
-* `nt` → next instruction **with trace**
-* `rr` → read all registers manually
-* `di` → disassemble around current PC
-
-By default, whenever the program stops, LLDB will:
-
-* Show register state
-* Show 10 instructions around current PC
-
----
-
-## 📝 ARM64 + macOS ABI Cheatsheet
-
-**Registers**
-
-* `x0–x7` → function arguments (1st arg in `x0`, 2nd in `x1`, etc.)
-* `x0` → return value register
-* `x8` → indirect result pointer
-* `x9–x15` → temporaries (caller-saved)
-* `x19–x28` → callee-saved registers (must be preserved)
-* `x29` → frame pointer
-* `x30` → link register (return address)
-* `sp` → stack pointer
-
-**Stack Alignment**
-
-* Must be 16-byte aligned at function calls.
-
-**Syscalls (bare-metal track only)**
-
-* `x16` → syscall number
-* `x0–x2` → syscall args (fd, buffer, size, etc.)
-* `svc #0` → trigger kernel call
-
-**Symbol Rules**
-
-* `_foo` in assembly ↔ `foo()` in C
-* Prefix all assembly globals with `_` for interop
-
-**Exit codes**
-
-* Bare-metal: explicit `exit` syscall.
-* Systems: return in `x0` and `ret`; libc calls `exit(x0)`.
-
-**Interop Example**
-
-```c
-// C file
-extern long add_two(long x, long y);
-int main() {
-    return (int)add_two(7, 3);
-}
-```
-
-```asm
-// Assembly file
-.global _add_two
-_add_two:
-    add x0, x0, x1
-    ret
-```
-
----
-
-## 🐞 Troubleshooting
-
-### Always getting exit code `0`
-
-* If using `_main`, libc may swallow return value.
-* Use `_start` in bare-metal, or `ret` in `_main` so libc calls `exit(x0)`.
-
-### `lldb: error: invalid combination of options`
-
-* Fixed by using `disassemble -a $pc -c 10`.
-
-### Rosetta / x86\_64 interference
-
-* Confirm binary arch with `file bin/hello_world`.
-* If wrong, force build with `arch -arm64`.
-
-### Permissions
+### macOS bare-metal
 
 ```bash
-chmod +x tools/*.sh
+make bare file=examples/hello_world/hello_world_bare_macos.s target=macos
+./bin/hello_world_bare_macos
 ```
+
+### macOS systems (ASM + C)
+
+```bash
+make build file=examples/hello_world/hello_world_sys_macos.s target=macos
+./bin/hello_world_sys_macos
+```
+
+### Linux bare-metal (cross-compiled, run in QEMU)
+
+```bash
+make bare file=examples/hello_world/hello_world_bare_linux.s target=linux
+qemu-aarch64 ./bin/hello_world_bare_linux
+```
+
+### Linux systems (ASM + C)
+
+```bash
+make build file=examples/hello_world/hello_world_sys_linux.s target=linux
+qemu-aarch64 ./bin/hello_world_sys_linux
+```
+
+---
+
+## 🐞 Debugging
+
+### macOS
+
+```bash
+make debug file=examples/hello_world/hello_world_bare_macos.s target=macos
+```
+
+Runs `lldb` with `tools/debug.lldb` preloaded.
+
+### Linux
+
+* Use `gdb-multiarch` attached to `qemu-aarch64`.
+* Example:
+
+  ```bash
+  qemu-aarch64 -g 1234 ./bin/hello_world_bare_linux
+  gdb-multiarch ./bin/hello_world_bare_linux
+  (gdb) target remote :1234
+  ```
 
 ---
 
 ## 📚 References
 
-- [LLVM Clang Compiler User Manual](https://clang.llvm.org/docs/UsersManual.html) 
-- [LLVM Download & Documentation](https://releases.llvm.org/download.html) 
-- [ARM C/C++ Compiler (Clang/LLVM-based)](https://developer.arm.com/documentation/101458/latest/Supporting-reference-information/Clang-and-LLVM-documentation) 
-- [ARM Architecture Reference Manual (ARMv8-A)](https://developer.arm.com/documentation/ddi0487/latest)  
-- [Apple Developer: Writing ARM64 Code for Apple Platforms](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms)  
-- [LLDB Command Guide](https://lldb.llvm.org/use/map.html)
+* [Linux AArch64 syscall table](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)
+* [Apple Developer Docs: macOS system calls](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/syscall.2.html)
+* [ARMv8-A Architecture Reference Manual (ARM64)](https://developer.arm.com/documentation/ddi0487/latest)
+
+````
 
 ---
 
-## ✨ Goals
+### 📘 `examples/hello_world/README.md`
 
-* Gain comfort with ARM64 registers and instructions.
-* Learn how macOS expects functions, arguments, and syscalls to work.
-* Build small but meaningful assembly programs in both contexts.
-* Explore Apple Silicon at the lowest level for fun and mastery.
+```markdown
+# Hello World (Assembly + C Interop)
+
+This directory introduces the **first programs** in ARM64 assembly, for both Linux and macOS.  
+Each platform has two variants:
+
+- **Bare-metal (`hello_world_bare_*`)**
+  - Pure assembly.
+  - Makes syscalls directly (no libc).
+  - Minimal starting point for learning.
+
+- **Systems (`hello_world_sys_*`)**
+  - Assembly provides helper functions (`get_message`).
+  - C code calls into assembly and prints strings.
+  - Demonstrates real-world interop.
+
+---
+
+## 📂 Files
+
+````
+
+hello\_world\_bare\_linux.s   # Linux syscall: write(64), exit(93)
+hello\_world\_bare\_macos.s   # macOS syscall: write(0x2000004), exit(0x2000001)
+
+hello\_world\_sys\_linux.s    # Provides get\_message()
+hello\_world\_sys\_linux.c    # Calls get\_message(), prints message
+
+hello\_world\_sys\_macos.s    # Provides \_get\_message()
+hello\_world\_sys\_macos.c    # Calls get\_message(), prints message
+
+````
+
+---
+
+## 🔧 Syscall Differences
+
+| Platform | Write syscall | Exit syscall | Register |
+|----------|---------------|--------------|----------|
+| **Linux** | `x8 = 64`     | `x8 = 93`    | `svc #0` |
+| **macOS** | `x16 = 0x2000004` | `x16 = 0x2000001` | `svc #0` |
+
+---
+
+## ▶️ Build & Run
+
+### Linux bare-metal
+```bash
+make bare file=examples/hello_world/hello_world_bare_linux.s target=linux
+qemu-aarch64 ./bin/hello_world_bare_linux
+````
+
+### macOS bare-metal
+
+```bash
+make bare file=examples/hello_world/hello_world_bare_macos.s target=macos
+./bin/hello_world_bare_macos
+```
+
+### Linux systems
+
+```bash
+make build file=examples/hello_world/hello_world_sys_linux.s target=linux
+qemu-aarch64 ./bin/hello_world_sys_linux
+```
+
+### macOS systems
+
+```bash
+make build file=examples/hello_world/hello_world_sys_macos.s target=macos
+./bin/hello_world_sys_macos
+```
+
+---
+
+## 🧠 Concepts
+
+* **Registers**:
+
+  * `x0`–`x2`: syscall args
+  * `x8` (Linux) or `x16` (macOS): syscall number
+* **Bare vs Systems**:
+
+  * Bare = minimal learning scaffold.
+  * Systems = more realistic, with C integration.
+* **Cross-platform portability**:
+
+  * Assembly differs only in syscall numbers + exported symbol names.
+
+---
+
+## 📚 Further Reading
+
+* Linux: [Syscall numbers for AArch64](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)
+* macOS: [Mach syscalls](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/syscall.2.html)
+
+```
+
+---
+
+⚡ Next step: I can **patch your `tools/build.sh`** so it’s aware of this new naming convention (`*_bare_linux`, `*_sys_macos`) and automatically picks the right compile flags.  
+
+Do you want me to update `tools/build.sh` + `Makefile` now to fully support this new structure?
+```
+
 
 
 
