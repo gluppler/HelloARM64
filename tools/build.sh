@@ -1,46 +1,54 @@
 #!/bin/bash
 # tools/build.sh
-# Build script for ARM64 assembly on Apple Silicon (macOS).
-# Supports normal (_main) builds and bare-metal (_start) builds.
+# Universal build script for ARM64 assembly projects on Apple Silicon.
+# Handles both bare-metal and systems-level builds (with optional C interop).
 
-set -e
-
-BIN_DIR="bin"
-DEBUG_FLAG="-g"
-mkdir -p "$BIN_DIR"
+set -e  # exit on error
 
 if [ $# -lt 1 ]; then
-    echo "Usage: $0 <asm-file> [--debug] [--bare]"
+    echo "Usage: $0 <path-to-asm-file> [--bare] [--debug]"
+    echo "Example: ./tools/build.sh examples/hello_world.s"
     exit 1
 fi
 
-INPUT=$1
-DEBUG_MODE=false
-BARE_MODE=false
+ASM_FILE=$1
+BASENAME=$(basename "$ASM_FILE" .s)
+DIRNAME=$(dirname "$ASM_FILE")
+OUT_FILE="bin/$BASENAME"
 
-# Parse flags
-shift || true
-while [ $# -gt 0 ]; do
-    case "$1" in
-        --debug) DEBUG_MODE=true ;;
-        --bare)  BARE_MODE=true ;;
+# Optional flags
+MODE="normal"
+DEBUG=false
+
+for arg in "$@"; do
+    case $arg in
+        --bare) MODE="bare"; shift ;;
+        --debug) DEBUG=true; shift ;;
     esac
-    shift
 done
 
-BASE_NAME=$(basename "$INPUT" .s)
-OUT_FILE="$BIN_DIR/$BASE_NAME"
+mkdir -p bin
 
-echo "[*] Assembling $INPUT -> $OUT_FILE"
+echo "[*] Building $ASM_FILE -> $OUT_FILE"
 
-if [ "$BARE_MODE" = true ]; then
-    clang $DEBUG_FLAG -nostartfiles -o "$OUT_FILE" "$INPUT"
+# Check if matching C file exists
+C_FILE="$DIRNAME/$BASENAME.c"
+if [ -f "$C_FILE" ]; then
+    echo "[*] Detected companion C file: $C_FILE"
+    # Systems track: compile C + ASM together
+    clang -arch arm64 -Wall -o "$OUT_FILE" "$C_FILE" "$ASM_FILE"
 else
-    clang $DEBUG_FLAG -o "$OUT_FILE" "$INPUT"
+    if [ "$MODE" = "bare" ]; then
+        echo "[*] Bare-metal mode"
+        clang -arch arm64 -nostdlib -o "$OUT_FILE" "$ASM_FILE"
+    else
+        echo "[*] Systems mode (assembly only)"
+        clang -arch arm64 -o "$OUT_FILE" "$ASM_FILE"
+    fi
 fi
 
-if [ "$DEBUG_MODE" = true ]; then
-    echo "[*] Launching in LLDB"
+if [ "$DEBUG" = true ]; then
+    echo "[*] Launching LLDB"
     lldb -s tools/debug.lldb "$OUT_FILE"
 else
     echo "[*] Running $OUT_FILE"
