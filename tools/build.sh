@@ -1,57 +1,99 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # tools/build.sh
-# Universal build script for ARM64 assembly projects on Apple Silicon.
-# Handles both bare-metal and systems-level builds (with optional C interop).
-
-set -e  # exit on error
+# Usage: ./tools/build.sh <path-to-.s> [--target=linux|macos] [--bare] [--debug]
+set -euo pipefail
 
 if [ $# -lt 1 ]; then
-    echo "Usage: $0 <path-to-asm-file> [--bare] [--debug]"
-    echo "Example: ./tools/build.sh examples/hello_world.s"
-    exit 1
+  echo "Usage: $0 <asm-file> [--target=linux|macos] [--bare] [--debug]"
+  exit 1
 fi
 
-ASM_FILE=$1
-BASENAME=$(basename "$ASM_FILE" .s)
-DIRNAME=$(dirname "$ASM_FILE")
-OUT_FILE="bin/$BASENAME"
-
-# Optional flags
-MODE="normal"
+ASM="$1"; shift || true
+TARGET="macos"
+BARE=false
 DEBUG=false
 
-for arg in "$@"; do
-    case $arg in
-        --bare) MODE="bare"; shift ;;
-        --debug) DEBUG=true; shift ;;
-    esac
+for ARG in "$@"; do
+  case "$ARG" in
+    --target=linux) TARGET="linux" ;;
+    --target=macos) TARGET="macos" ;;
+    --bare) BARE=true ;;
+    --debug) DEBUG=true ;;
+    *) ;;
+  esac
 done
 
-mkdir -p bin
+BIN_DIR="bin"
+mkdir -p "$BIN_DIR"
+BASE=$(basename "$ASM" .s)
+OUT="$BIN_DIR/$BASE"
 
-echo "[*] Building $ASM_FILE -> $OUT_FILE"
+DIR=$(dirname "$ASM")
+C="$DIR/$BASE.c"
 
-# Check if matching C file exists
-C_FILE="$DIRNAME/$BASENAME.c"
-if [ -f "$C_FILE" ]; then
-    echo "[*] Detected companion C file: $C_FILE"
-    # Systems track: compile C + ASM together
-    clang -arch arm64 -Wall -o "$OUT_FILE" "$C_FILE" "$ASM_FILE"
-else
-    if [ "$MODE" = "bare" ]; then
-        echo "[*] Bare-metal mode"
-        clang -arch arm64 -nostdlib -o "$OUT_FILE" "$ASM_FILE"
+echo "[*] Building $ASM for target=$TARGET (bare=$BARE, debug=$DEBUG) -> $OUT"
+
+if [ "$TARGET" = "macos" ]; then
+  # macOS native clang
+  if [ -f "$C" ]; then
+    clang -arch arm64 -o "$OUT" "$C" "$ASM"
+  else
+    if [ "$BARE" = true ]; then
+      clang -arch arm64 -nostartfiles -o "$OUT" "$ASM"
     else
-        echo "[*] Systems mode (assembly only)"
-        clang -arch arm64 -o "$OUT_FILE" "$ASM_FILE"
+      clang -arch arm64 -o "$OUT" "$ASM"
     fi
+  fi
+
+elif [ "$TARGET" = "linux" ]; then
+  # prefer aarch64-linux-gnu-gcc if present
+  if command -v aarch64-linux-gnu-gcc >/dev/null 2>&1; then
+    CC="aarch64-linux-gnu-gcc"
+  elif command -v clang >/dev/null 2>&1; then
+    CC="clang --target=aarch64-linux-gnu"
+  else
+    echo "No cross-compiler found. Install aarch64-linux-gnu-gcc or clang."
+    exit 1
+  fi
+
+  if [ -f "$C" ]; then
+    if [[ "$CC" == *clang* ]]; then
+      clang --target=aarch64-linux-gnu -o "$OUT" "$C" "$ASM"
+    else
+      $CC -o "$OUT" "$C" "$ASM"
+    fi
+  else
+    if [ "$BARE" = true ]; then
+      if [[ "$CC" == *clang* ]]; then
+        clang --target=aarch64-linux-gnu -nostartfiles -o "$OUT" "$ASM"
+      else
+        $CC -nostartfiles -o "$OUT" "$ASM"
+      fi
+    else
+      if [[ "$CC" == *clang* ]]; then
+        clang --target=aarch64-linux-gnu -o "$OUT" "$ASM"
+      else
+        $CC -o "$OUT" "$ASM"
+      fi
+    fi
+  fi
+else
+  echo "Unknown target: $TARGET"
+  exit 1
 fi
 
 if [ "$DEBUG" = true ]; then
-    echo "[*] Launching LLDB"
-    lldb -s tools/debug.lldb "$OUT_FILE"
+  echo "[*] Debug mode requested."
+  if [ "$TARGET" = "macos" ]; then
+    echo "[*] Launching lldb..."
+    lldb "$OUT"
+  else
+    echo "Debugging cross-compiled Linux binary is not automated here. Use QEMU/GDB or run on a Linux/aarch64 host."
+  fi
 else
-    echo "[*] Running $OUT_FILE"
-    "$OUT_FILE" || true
-    echo "[*] Exit code: $?"
+  echo "[*] Running: $OUT"
+  if [ "$TARGET" = "linux" ]; then
+    echo "Note: Linux AArch64 binaries may not run natively on macOS. Use qemu-aarch64 or run on an aarch64 host."
+  fi
+  "$OUT" || true
 fi

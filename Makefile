@@ -1,23 +1,14 @@
-# Root Makefile for HelloARM64
+# Makefile (root)
+file ?= examples/hello_world/sys_macos_hello.s
+target ?= macos
 
-file ?= examples/hello_world.s
-
-all: build
+.PHONY: build bare debug
 
 build:
-	@./tools/build.sh $(file)
+	@./tools/build.sh $(file) --target=$(target)
 
-bare_build:
-	@./tools/build.sh $(file) --bare
+bare:
+	@./tools/build.sh $(file) --target=$(target) --bare
 
 debug:
-	@./tools/build.sh $(file) --debug
-
-bare_debug:
-	@./tools/build.sh $(file) --bare --debug
-
-run:
-	@bin/$(basename $(notdir $(file)))
-
-clean:
-	@./tools/clean.sh
+	@./tools/build.sh $(file) --target=$(target) --debug
