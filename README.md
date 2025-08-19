@@ -1,5 +1,3 @@
-
-````
 # HelloARM64
 
 Learning ARM64 (AArch64) programming on Apple Silicon.  
