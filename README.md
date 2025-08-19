@@ -220,14 +220,6 @@ make build file=examples/hello_world/hello_world_sys_macos.s target=macos
 * Linux: [Syscall numbers for AArch64](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)
 * macOS: [Mach syscalls](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/syscall.2.html)
 
-```
-
----
-
-⚡ Next step: I can **patch your `tools/build.sh`** so it’s aware of this new naming convention (`*_bare_linux`, `*_sys_macos`) and automatically picks the right compile flags.  
-
-Do you want me to update `tools/build.sh` + `Makefile` now to fully support this new structure?
-```
 
 
 
