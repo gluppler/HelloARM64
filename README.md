@@ -1,226 +1,111 @@
-# HelloARM64
+# HelloARM64: A Curriculum for ARM64 Assembly
 
-Learn ARM64 (AArch64) programming on both **Linux** and **macOS (Apple Silicon)**.  
-This project is organized into two parallel **tracks**:
+Welcome! This repository provides a structured, curriculum-based approach to learning ARM64 (AArch64) assembly. It is designed to run on **any native ARM64 hardware**, including Linux servers, desktops, and Apple Silicon Macs.
 
-- **Bare-metal track**: pure assembly with direct syscalls, no libc.
-- **Systems track**: assembly + C interop to build realistic userland programs.
+This project contains two main learning tracks, as well as a `sample` folder for quickly testing your build environment.
+
+-   **`sample` Folder**: Use this first to ensure your toolchain is working correctly.
+-   **`baremetal` Track**: Learn pure assembly by interacting directly with the OS kernel.
+-   **`systems` Track**: Learn to integrate assembly with C++ for real-world applications.
 
 ---
+
+## 🧪 Quick Test: Verify Your Setup
+
+Before starting the curriculum, use the `sample` folder to make sure everything is configured correctly.
+
+#### 1. Test Bare-Metal Compilation
+```bash
+make bare file=sample/baremetal-test/hello-bare.s
+./bin/hello-bare
+````
+
+You should see "Hello Bare-Metal\!" printed to your console.
+
+#### 2\. Test Systems (C++) Compilation
+
+```bash
+make build file=sample/systems-test/hello-sys.s
+./bin/hello-sys
+```
+
+You should see "Hello Systems\!" printed to your console.
+
+If both of these work, you are ready to start the curriculum\!
+
+-----
 
 ## 📂 Project Structure
 
-```
+The repository is organized like a course, with numbered folders that build upon each other. Start with `01_` in each track and work your way up.
 
+```
 HelloARM64/
-├── baremetal/           # Low-level assembly lessons
-│    ├── 00\_registers/
-│    ├── 01\_arithmetic/
-│    └── ...
-├── examples/
-│    ├── hello\_world/
-│    │    ├── hello\_world\_bare\_linux.s
-│    │    ├── hello\_world\_bare\_macos.s
-│    │    ├── hello\_world\_sys\_linux.s
-│    │    ├── hello\_world\_sys\_linux.c
-│    │    ├── hello\_world\_sys\_macos.s
-│    │    ├── hello\_world\_sys\_macos.c
-│    │    └── README.md
-│    └── ...
+├── sample/                # <-- Use this to test your setup
+│   ├── baremetal-test/
+│   └── systems-test/
+├── baremetal/             # The bare-metal curriculum
+│   ├── 01_Registers_and_Syscalls/
+│   ├── 02_Memory_and_Data/
+│   ├── 03_Arithmetic_and_Logic/
+│   ├── 04_Control_Flow/
+│   ├── 05_The_Stack_and_Functions/
+│   ├── 06_Advanced_Memory_Addressing/
+│   └── projects/
+├── systems/               # The C++ interop curriculum
+│   ├── 01_Basic_Interop/
+│   ├── 02_Passing_Arguments/
+│   ├── 03_Returning_Values/
+│   ├── 04_Data_Structures/
+│   ├── 05_Strings_and_Pointers/
+│   ├── 06_Calling_Cpp_from_Asm/
+│   └── projects/
 ├── tools/
-│    ├── build.sh        # Unified build script (Linux + macOS)
-│    ├── debug.lldb      # Debug setup for macOS
-│    └── (future Linux debug configs)
-├── Makefile             # Frontend for build.sh
-└── README.md            # (this file)
-
-````
-
----
-
-## ⚙️ Toolchain
-
-### macOS (Apple Silicon)
-- `clang` (built-in)
-- `lldb` (debugger)
-
-### Linux (AArch64)
-- `aarch64-linux-gnu-gcc` or `clang --target=aarch64-linux-gnu`
-- `qemu-aarch64` (to run Linux binaries from macOS)
-- `gdb-multiarch` (optional debugger for Linux)
-
-Install via Homebrew (macOS):
-```bash
-brew install qemu
-brew install llvm
-````
-
----
-
-## ▶️ Building & Running
-
-### macOS bare-metal
-
-```bash
-make bare file=examples/hello_world/hello_world_bare_macos.s target=macos
-./bin/hello_world_bare_macos
+└── Makefile
 ```
 
-### macOS systems (ASM + C)
+-----
+
+## ▶️ Building the Curriculum Examples
+
+The `Makefile` and `tools/` scripts are designed to work seamlessly with the new structure.
+
+### Building a Bare-metal Example
+
+The `bare` command is for pure assembly files.
 
 ```bash
-make build file=examples/hello_world/hello_world_sys_macos.s target=macos
-./bin/hello_world_sys_macos
+make bare file=baremetal/01_Registers_and_Syscalls/registers.s
 ```
 
-### Linux bare-metal (cross-compiled, run in QEMU)
+### Building a Systems (ASM + C++) Example
+
+The `build` command is for assembly files that have a corresponding `main.cpp`.
 
 ```bash
-make bare file=examples/hello_world/hello_world_bare_linux.s target=linux
-qemu-aarch64 ./bin/hello_world_bare_linux
+make build file=systems/01_Basic_Interop/hello.s
 ```
 
-### Linux systems (ASM + C)
+After building, you can run the output file from the `bin/` directory:
 
 ```bash
-make build file=examples/hello_world/hello_world_sys_linux.s target=linux
-qemu-aarch64 ./bin/hello_world_sys_linux
+./bin/registers
+./bin/hello
 ```
 
----
-
-## 🐞 Debugging
-
-### macOS
-
-```bash
-make debug file=examples/hello_world/hello_world_bare_macos.s target=macos
-```
-
-Runs `lldb` with `tools/debug.lldb` preloaded.
-
-### Linux
-
-* Use `gdb-multiarch` attached to `qemu-aarch64`.
-* Example:
-
-  ```bash
-  qemu-aarch64 -g 1234 ./bin/hello_world_bare_linux
-  gdb-multiarch ./bin/hello_world_bare_linux
-  (gdb) target remote :1234
-  ```
-
----
+-----
 
 ## 📚 References
 
-* [Linux AArch64 syscall table](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)
-* [Apple Developer Docs: macOS system calls](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/syscall.2.html)
-* [ARMv8-A Architecture Reference Manual (ARM64)](https://developer.arm.com/documentation/ddi0487/latest)
+  * [ARMv8-A Architecture Reference Manual](https://developer.arm.com/documentation/ddi0487/latest)
+  * [Linux AArch64 syscall table](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)
+  * [Apple Developer Docs: macOS system calls](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/syscall.2.html)
+  * [Procedure Call Standard for the ARM 64-bit Architecture (AArch64)](https://www.google.com/search?q=https://developer.arm.com/documentation/ihi0055/latest/)
 
-````
+<!-- end list -->
 
----
-
-### 📘 `examples/hello_world/README.md`
-
-```markdown
-# Hello World (Assembly + C Interop)
-
-This directory introduces the **first programs** in ARM64 assembly, for both Linux and macOS.  
-Each platform has two variants:
-
-- **Bare-metal (`hello_world_bare_*`)**
-  - Pure assembly.
-  - Makes syscalls directly (no libc).
-  - Minimal starting point for learning.
-
-- **Systems (`hello_world_sys_*`)**
-  - Assembly provides helper functions (`get_message`).
-  - C code calls into assembly and prints strings.
-  - Demonstrates real-world interop.
-
----
-
-## 📂 Files
-
-````
-
-hello\_world\_bare\_linux.s   # Linux syscall: write(64), exit(93)
-hello\_world\_bare\_macos.s   # macOS syscall: write(0x2000004), exit(0x2000001)
-
-hello\_world\_sys\_linux.s    # Provides get\_message()
-hello\_world\_sys\_linux.c    # Calls get\_message(), prints message
-
-hello\_world\_sys\_macos.s    # Provides \_get\_message()
-hello\_world\_sys\_macos.c    # Calls get\_message(), prints message
-
-````
-
----
-
-## 🔧 Syscall Differences
-
-| Platform | Write syscall | Exit syscall | Register |
-|----------|---------------|--------------|----------|
-| **Linux** | `x8 = 64`     | `x8 = 93`    | `svc #0` |
-| **macOS** | `x16 = 0x2000004` | `x16 = 0x2000001` | `svc #0` |
-
----
-
-## ▶️ Build & Run
-
-### Linux bare-metal
-```bash
-make bare file=examples/hello_world/hello_world_bare_linux.s target=linux
-qemu-aarch64 ./bin/hello_world_bare_linux
-````
-
-### macOS bare-metal
-
-```bash
-make bare file=examples/hello_world/hello_world_bare_macos.s target=macos
-./bin/hello_world_bare_macos
 ```
-
-### Linux systems
-
-```bash
-make build file=examples/hello_world/hello_world_sys_linux.s target=linux
-qemu-aarch64 ./bin/hello_world_sys_linux
 ```
-
-### macOS systems
-
-```bash
-make build file=examples/hello_world/hello_world_sys_macos.s target=macos
-./bin/hello_world_sys_macos
-```
-
----
-
-## 🧠 Concepts
-
-* **Registers**:
-
-  * `x0`–`x2`: syscall args
-  * `x8` (Linux) or `x16` (macOS): syscall number
-* **Bare vs Systems**:
-
-  * Bare = minimal learning scaffold.
-  * Systems = more realistic, with C integration.
-* **Cross-platform portability**:
-
-  * Assembly differs only in syscall numbers + exported symbol names.
-
----
-
-## 📚 Further Reading
-
-* Linux: [Syscall numbers for AArch64](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)
-* macOS: [Mach syscalls](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/syscall.2.html)
-
-
 
 
 
