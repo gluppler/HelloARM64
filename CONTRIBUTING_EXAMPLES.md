@@ -144,3 +144,17 @@ svc #0
 On macOS, replace Linux syscall numbers with **Mach-O system calls** when needed.
 
 ---
+
+## Fundamentals Reference
+
+The `Fundamentals/` directory contains comprehensive, production-ready examples covering all ARM64 assembly concepts. These files serve as both learning resources and reference implementations, demonstrating:
+
+- Complete ARM64 instruction coverage
+- Security best practices
+- Clean code principles
+- Proper error handling
+- Cross-platform compatibility (Linux and macOS)
+
+All Fundamentals examples are compiled and tested, ready for use as reference implementations.
+
+---
