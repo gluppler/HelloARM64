@@ -1,9 +1,12 @@
 //  Fundamentals/01_Registers.s
+.text
 //  AArch64 Register Architecture and Usage
 //  Demonstrates all register types: General Purpose, Stack Pointer, Link Register, etc.
 
-.global _start
+
 .align 4
+
+.global _start
 
 _start:
     //  ============================================
@@ -57,11 +60,15 @@ _start:
     
     //  x29: Frame Pointer (FP) - Callee-saved
     //  Points to the current stack frame
-    mov     x29, sp                 //  Initialize frame pointer from stack pointer
+    //  Note: Use add instead of mov for SP to ensure compatibility
+    add     x29, sp, #0             //  Initialize frame pointer from stack pointer
     
     //  x30: Link Register (LR) - Stores return address
     //  Callee-saved, but typically saved by callee if it calls other functions
-    adr     x30, _start             //  Example: store address
+    //  Note: In _start, LR is not set (no return address)
+    //  Example: Load address of current location
+    adr     x30, lr_example_label   //  Example: store address
+lr_example_label:
     
     //  ============================================
     //  SPECIAL REGISTERS
@@ -104,7 +111,11 @@ _start:
     //  4. Preserve callee-saved registers if modifying them
     
     //  Exit with success code
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0                   //  Exit code 0
-    movz    x16, #0x0001             //  macOS exit syscall
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
+    
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+halt_loop:
+    b       halt_loop

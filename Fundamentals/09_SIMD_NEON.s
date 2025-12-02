@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/09_SIMD_NEON.s
 //  SIMD/NEON Operations: Vector operations for parallel processing
 //  SECURITY: Validate vector sizes, check alignment, prevent buffer overflows
@@ -204,10 +206,14 @@ _start:
     movi    v1.16b, #0
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
+
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+halt_loop:
+    b       halt_loop
 
 .data
 .align 16                              //  16-byte alignment for vectors

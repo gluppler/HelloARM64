@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/04_Control_Flow.s
 //  Control Flow: branches, conditionals, loops
 //  SECURITY: All branches are validated, no infinite loops
@@ -15,10 +17,19 @@ _start:
     
 label1:
     //  bl: Branch with link (function call)
+    //  Note: In _start context, bl sets LR but _start has no return address
+    //  Functions called from _start will return to _start (which is fine)
     bl      example_function         //  Call function, save return address in LR
     
     //  br: Branch to register
     adr     x0, label2
+    //  Validate address before branching
+    cmp     x0, #0
+    b.eq    invalid_branch_target
+    //  Check alignment (code addresses must be 4-byte aligned)
+    and     x1, x0, #0x3
+    cmp     x1, #0
+    b.ne    invalid_branch_target    //  Not aligned
     br      x0                       //  Jump to address in x0
     
 label2:
@@ -211,9 +222,9 @@ outer_end:
     //  5. Clear sensitive registers after use
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
 //  Example function for demonstration
@@ -228,4 +239,11 @@ example_function:
     //  Function epilogue
     ldr     x30, [sp]                //  Restore link register
     add     sp, sp, #16              //  Restore stack
-    ret                              //  Return
+    ret                              //  Return to caller (branches to address in LR)
+    
+invalid_branch_target:
+    //  Handle invalid branch target
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
+    mov     x0, #1
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
+    svc     #0

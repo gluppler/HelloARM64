@@ -17,7 +17,7 @@ endif
 file ?= sample/baremetal-test/hello-bare.s
 
 # Define phony targets to prevent conflicts with file names.
-.PHONY: all build bare debug clean fundamentals clean-fundamentals
+.PHONY: all build bare debug clean fundamentals advanced clean-fundamentals clean-advanced all-examples
 
 # The 'all' target is a default that will run the bare-metal sample.
 all:
@@ -67,10 +67,25 @@ fundamentals:
 		if [ "$(target)" = "macos" ]; then \
 			$(CC) -e _start -nostartfiles -o "bin/fundamentals/$$name" "$$f" 2>&1 || echo "Failed: $$name"; \
 		else \
-			$(CC) -nostartfiles -static -o "bin/fundamentals/$$name" "$$f" 2>&1 || echo "Failed: $$name"; \
+			$(CC) -nostdlib -o "bin/fundamentals/$$name" "$$f" 2>&1 || echo "Failed: $$name"; \
 		fi \
 	done
 	@echo "Fundamentals build complete. Binaries in bin/fundamentals/"
+
+# `make advanced` - Build all Advanced examples
+advanced:
+	@echo "Building Advanced examples for target: $(target)"
+	@mkdir -p bin/advanced
+	@for f in Advanced/*.s; do \
+		name=$$(basename "$$f" .s); \
+		echo "Compiling $$name..."; \
+		if [ "$(target)" = "macos" ]; then \
+			$(CC) -e _start -nostartfiles -o "bin/advanced/$$name" "$$f" 2>&1 || echo "Failed: $$name"; \
+		else \
+			$(CC) -nostdlib -o "bin/advanced/$$name" "$$f" 2>&1 || echo "Failed: $$name"; \
+		fi \
+	done
+	@echo "Advanced build complete. Binaries in bin/advanced/"
 
 # `make clean` - Removes all compiled binaries and temporary files.
 clean:
@@ -85,3 +100,14 @@ clean:
 clean-fundamentals:
 	@rm -rf bin/fundamentals
 	@echo "Cleaned bin/fundamentals/ directory"
+
+# `make clean-advanced` - Removes only Advanced binaries
+clean-advanced:
+	@rm -rf bin/advanced
+	@echo "Cleaned bin/advanced/ directory"
+
+# `make all-examples` - Build both Fundamentals and Advanced examples
+all-examples: fundamentals advanced
+	@echo "All examples built:"
+	@echo "  - Fundamentals: bin/fundamentals/"
+	@echo "  - Advanced: bin/advanced/"

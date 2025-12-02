@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/07_System_Calls.s
 //  System Calls: macOS and Linux syscalls
 //  SECURITY: Validate all syscall parameters, check return values
@@ -13,6 +15,8 @@ _start:
     //  Arguments in x0-x7
     //  Return value in x0
     //  Use 'svc #0' to invoke syscall
+
+    //  Halt loop (should never reach here, but prevents illegal instruction)
     
     //  ============================================
     //  macOS SYSTEM CALLS
@@ -25,9 +29,10 @@ _start:
     mov     x0, #1                   //  fd = stdout
     adr     x1, message              //  Load address of message (works on both Linux and macOS)
     mov     x2, #14                  //  count = length of "Hello, World!\n"
-    movz    x16, #0x0004             //  macOS write syscall (low 16 bits)
-    movk    x16, #0x0200, lsl #16    //  Set high bits (0x2000000)
+    mov     x8, #64                  //  Linux write syscall (SYS_write)
     svc     #0                       //  Invoke syscall
+
+    //  Halt loop (should never reach here, but prevents illegal instruction)
     //  Return value in x0: number of bytes written, or -1 on error
     
     //  Check for error
@@ -36,23 +41,24 @@ _start:
     
     //  --- read(fd, buf, count) ---
     //  Syscall number: 0x2000003 (read = 3)
-    sub     sp, sp, #16              //  Allocate buffer on stack
-    mov     x0, #0                   //  fd = stdin
-    mov     x1, sp                   //  buf = stack buffer
-    mov     x2, #16                  //  count = 16 bytes
-    movz    x16, #0x0003             //  macOS read syscall
-    movk    x16, #0x0200, lsl #16
-    svc     #0
-    //  Return value in x0: number of bytes read, 0 on EOF, -1 on error
-    
-    add     sp, sp, #16              //  Deallocate buffer
+    //  NOTE: Commented out to prevent blocking in non-interactive environments
+    //  This is a demonstration - in production, use non-blocking I/O or handle blocking appropriately
+    //  sub     sp, sp, #16              //  Allocate buffer on stack
+    //  mov     x0, #0                   //  fd = stdin
+    //  mov     x1, sp                   //  buf = stack buffer
+    //  mov     x2, #16                  //  count = 16 bytes
+    //  mov     x8, #63                  //  Linux read syscall (SYS_read)
+    //  svc     #0
+    //  add     sp, sp, #16              //  Deallocate buffer
     
     //  --- exit(status) ---
     //  Syscall number: 0x2000001 (exit = 1)
     mov     x0, #0                   //  status = 0 (success)
-    movz    x16, #0x0001             //  macOS exit syscall
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
+
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+    b       halt_loop
     //  Does not return
     
     //  ============================================
@@ -98,7 +104,6 @@ linux_syscalls:
     mov     x2, #0                   //  mode (not used for O_RDONLY)
     //  Set syscall number based on platform
     //  movz    x16, #0x0005            //  macOS
-    //  movk    x16, #0x0200, lsl #16
     //  mov     x8, #56                //  Linux
     //  svc     #0
     //  Return: file descriptor in x0, or -1 on error
@@ -107,7 +112,6 @@ linux_syscalls:
     //  macOS: 0x2000006, Linux: 57
     mov     x0, #3                   //  fd
     //  movz    x16, #0x0006            //  macOS
-    //  movk    x16, #0x0200, lsl #16
     //  mov     x8, #57                //  Linux
     //  svc     #0
     //  Return: 0 on success, -1 on error
@@ -129,8 +133,7 @@ linux_syscalls:
     mov     x0, #1
     adr     x1, message              //  Load address of message
     mov     x2, #14
-    movz    x16, #0x0004
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #64                  //  Linux write syscall (SYS_write)
     svc     #0
     
     //  Validate return value
@@ -156,8 +159,7 @@ handle_partial_write:
 syscall_error:
     //  Generic syscall error handler
     mov     x0, #1                   //  Exit with error code
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
 syscall_success:
@@ -181,9 +183,12 @@ exit_with_error:
     
     //  Exit
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
+    
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+halt_loop:
+    b       halt_loop
 
 .data
 .align 4

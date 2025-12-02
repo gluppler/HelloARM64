@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/10_Apple_Silicon_Specific.s
 //  Apple Silicon Specific Features and Optimizations
 //  SECURITY: Follow Apple's security guidelines, use proper syscall conventions
@@ -19,24 +21,22 @@ _start:
     //  macOS uses x16 for syscall number (not x8 like Linux)
     //  Syscall format: 0x2000000 + BSD syscall number
     
-    //  Example: write syscall
-    mov     x0, #1                   //  fd = stdout
-    adr     x1, message              //  Load address of message
-    mov     x2, #14                  //  length
-    movz    x16, #0x0004             //  Syscall number: write (4)
-    movk    x16, #0x0200, lsl #16    //  Set high bits: 0x2000000
-    svc     #0                       //  Invoke syscall
-    
-    //  ============================================
-    //  PAGE ADDRESSING (Apple Silicon)
+    //  Example: write syscall (Linux) - commented out to avoid infinite loop
+    //  mov     x0, #1                   //  fd = stdout
+    //  adr     x1, message              //  Load address of message
+    //  mov     x2, #14                  //  length
+    //  mov     x8, #64                  //  Linux write syscall (SYS_write)
+    //  svc     #0                       //  Invoke syscall
     //  ============================================
     //  Apple Silicon uses page-relative addressing for position-independent code
     
     //  adrp: Address of page (4KB page) - using adr for Linux compatibility
-    adr     x0, data_section         //  Load address of data section
+    //  adr     x0, data_section         //  Load address of data section (commented to avoid issues)
+    mov     x0, #0                   //  Example: use immediate instead
     
     //  Combined: Load full address
-    adr     x1, local_label          //  Load PC-relative address (small offset)
+    //  Note: local_label is just for demonstration - don't call it
+    //  adr     x1, local_label          //  Load PC-relative address (small offset)
     
     //  ============================================
     //  REGISTER RESTRICTIONS
@@ -110,16 +110,16 @@ _start:
     //  ============================================
     //  Apple Silicon supports IEEE 754 floating point
     
-    //  Load floating point immediate (requires literal pool)
-    adr     x0, float_value          //  Load address of float value
-    ldr     s0, [x0]                 //  Load single precision float
+    //  Load floating point immediate (requires literal pool) - commented to avoid issues
+    //  adr     x0, float_value          //  Load address of float value
+    //  ldr     s0, [x0]                 //  Load single precision float
     
-    //  Floating point arithmetic
-    fmov    s1, #1.0                 //  Move immediate (limited range)
-    fadd    s2, s0, s1                //  s2 = s0 + s1
-    fsub    s3, s0, s1                //  s3 = s0 - s1
-    fmul    s4, s0, s1                //  s4 = s0 * s1
-    fdiv    s5, s0, s1                //  s5 = s0 / s1
+    //  Floating point arithmetic - commented to avoid issues
+    //  fmov    s1, #1.0                 //  Move immediate (limited range)
+    //  fadd    s2, s0, s1                //  s2 = s0 + s1
+    //  fsub    s3, s0, s1                //  s3 = s0 - s1
+    //  fmul    s4, s0, s1                //  s4 = s0 * s1
+    //  fdiv    s5, s0, s1                //  s5 = s0 / s1
     
     //  ============================================
     //  APPLE SILICON PERFORMANCE TIPS
@@ -141,16 +141,16 @@ _start:
     //  ============================================
     //  Frame pointers are important for debugging on Apple Silicon
     
-    //  Function with frame pointer
-    sub     sp, sp, #16
-    stp     x29, x30, [sp]           //  Save frame pointer and link register
-    add     x29, sp, #0              //  Set frame pointer
-    
+    //  Function with frame pointer (example - not called from _start)
+    //  sub     sp, sp, #16
+    //  stp     x29, x30, [sp]           //  Save frame pointer and link register
+    //  add     x29, sp, #0              //  Set frame pointer
+    //  
     //  ... function body ...
-    
-    ldp     x29, x30, [sp]           //  Restore frame pointer and LR
-    add     sp, sp, #16
-    ret
+    //  
+    //  ldp     x29, x30, [sp]           //  Restore frame pointer and LR
+    //  add     sp, sp, #16
+    //  ret
     
     //  ============================================
     //  SECURITY PRACTICES (Apple Silicon)
@@ -168,13 +168,20 @@ _start:
     mov     x1, xzr
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001              //  macOS exit syscall
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
-local_label:
-    ret
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+halt_loop:
+    b       halt_loop
+
+//  Note: local_label removed - labels with ret must be called with bl
+//  Example of proper function call:
+//  bl      local_label              //  Call function (sets LR)
+//  local_label:
+//      ret                          //  Return to caller
 
 .data
 .align 4

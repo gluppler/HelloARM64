@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/06_Function_Calls.s
 //  Function Calls: calling conventions, parameter passing, return values
 //  SECURITY: Follow ABI, preserve callee-saved registers, validate parameters
@@ -105,15 +107,22 @@ _start:
     //  ============================================
     //  TAIL CALL OPTIMIZATION
     //  ============================================
+    //  Note: In _start context, we can't use true tail calls
+    //  because _start has no return address
+    //  This demonstrates the concept
     
     mov     x0, #42
-    b       tail_call_target         //  Use 'b' instead of 'bl' for tail calls
+    bl      tail_call_target         //  Call function (sets LR properly)
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
+
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+halt_loop:
+    b       halt_loop
 
 //  ============================================
 //  EXAMPLE FUNCTIONS
@@ -268,6 +277,14 @@ inner_function:
 
 //  Tail call target
 tail_call_target:
-    //  No prologue needed for tail call
+    //  Function prologue (needed when called from _start)
+    sub     sp, sp, #16              //  Allocate stack space
+    str     x30, [sp]                //  Save link register
+    
+    //  Function body
     add     x0, x0, #1
-    ret                              //  Return to caller of original function
+    
+    //  Function epilogue
+    ldr     x30, [sp]                //  Restore link register
+    add     sp, sp, #16              //  Restore stack
+    ret                              //  Return to caller

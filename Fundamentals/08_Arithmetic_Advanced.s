@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/08_Arithmetic_Advanced.s
 //  Advanced Arithmetic: extended operations, bit manipulation, division
 //  SECURITY: Check for overflow, validate operands, prevent division by zero
@@ -227,12 +229,13 @@ already_positive:
     mov     x1, xzr
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
 exit_error:
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
+    mov     x0, #1
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0

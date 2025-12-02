@@ -1,3 +1,5 @@
+
+.text
 //  Fundamentals/05_Stack_Operations.s
 //  Stack Operations: stack pointer, push/pop, frame pointers
 //  SECURITY: Stack must be 16-byte aligned, prevent stack overflow
@@ -170,9 +172,9 @@ _start:
     
 stack_overflow_error:
     //  Handle error (exit with error code)
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #1                   //  Error code
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
 stack_ok:
@@ -193,7 +195,7 @@ stack_ok:
     add     sp, sp, #16
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0

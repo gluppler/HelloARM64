@@ -1,8 +1,11 @@
 //  Fundamentals/02_Basic_Instructions.s
+.text
 //  Basic AArch64 Instructions: mov, add, sub, mul, and, orr, eor, etc.
 
-.global _start
+
 .align 4
+
+.global _start
 
 _start:
     //  ============================================
@@ -167,7 +170,11 @@ _start:
     mov     x1, xzr
     
     //  Exit
+    //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
     mov     x0, #0
-    movz    x16, #0x0001
-    movk    x16, #0x0200, lsl #16
+    mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
+
+    //  Halt loop (should never reach here, but prevents illegal instruction)
+halt_loop:
+    b       halt_loop
