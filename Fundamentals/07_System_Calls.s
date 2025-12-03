@@ -1,8 +1,7 @@
 
 .text
 //  Fundamentals/07_System_Calls.s
-//  System Calls: macOS and Linux syscalls
-//  SECURITY: Validate all syscall parameters, check return values
+//  System Calls: Linux syscalls with parameter validation and error handling
 
 .global _start
 .align 4
@@ -16,7 +15,7 @@ _start:
     //  Return value in x0
     //  Use 'svc #0' to invoke syscall
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
     
     //  ============================================
     //  macOS SYSTEM CALLS
@@ -32,7 +31,7 @@ _start:
     mov     x8, #64                  //  Linux write syscall (SYS_write)
     svc     #0                       //  Invoke syscall
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
     //  Return value in x0: number of bytes written, or -1 on error
     
     //  Check for error
@@ -57,7 +56,7 @@ _start:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
     b       halt_loop
     //  Does not return
     
@@ -165,15 +164,15 @@ syscall_error:
 syscall_success:
 exit_with_error:
     //  ============================================
-    //  SECURITY PRACTICES
+    //  SYSCALL BEST PRACTICES
     //  ============================================
-    //  1. Always validate syscall parameters
-    //  2. Check return values for errors
-    //  3. Validate file descriptors before use
-    //  4. Check buffer bounds before read/write
-    //  5. Use appropriate file permissions
-    //  6. Handle partial writes/reads
-    //  7. Clear sensitive data from buffers
+    //  Always validate syscall parameters before invocation
+    //  Check return values for errors (negative values indicate errors)
+    //  Validate file descriptors before use
+    //  Check buffer bounds before read/write operations
+    //  Use appropriate file permissions for file operations
+    //  Handle partial writes/reads (may not transfer all requested bytes)
+    //  Clear sensitive data from buffers after use
     
     //  Clear sensitive buffer
     sub     sp, sp, #16
@@ -186,7 +185,7 @@ exit_with_error:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

@@ -2,7 +2,7 @@
 .text
 //  Advanced/11_Advanced_Memory_Management.s
 //  Advanced Memory Management: Custom Allocators, Memory Pools, Garbage Collection Patterns
-//  SECURITY: All memory management is bounds-checked, no use-after-free, no double-free
+//  Demonstrates memory management patterns with bounds checking and safety guarantees
 
 .global _start
 .align 4
@@ -281,7 +281,7 @@ out_of_bounds_safe:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
     
@@ -292,7 +292,7 @@ alignment_error:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/09_SIMD_NEON.s
 //  SIMD/NEON Operations: Vector operations for parallel processing
-//  SECURITY: Validate vector sizes, check alignment, prevent buffer overflows
+//  Demonstrates vector operations with proper size validation and alignment
 
 .global _start
 .align 4
@@ -193,13 +193,13 @@ _start:
     dup     v0.4s, w2                //  v0 = {42, 42, 42, 42}
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  VECTOR OPERATION BEST PRACTICES
     //  ============================================
-    //  1. Ensure 16-byte alignment for vector loads/stores
-    //  2. Validate vector sizes before operations
-    //  3. Check buffer bounds for vector operations
-    //  4. Clear sensitive vector data after use
-    //  5. Use appropriate data types (signed/unsigned)
+    //  Ensure 16-byte alignment for vector loads/stores (required for performance)
+    //  Validate vector sizes before operations to prevent out-of-bounds access
+    //  Check buffer bounds for vector operations
+    //  Clear sensitive vector data after use
+    //  Use appropriate data types (signed/unsigned) based on data semantics
     
     //  Clear sensitive vector data
     movi    v0.16b, #0               //  Zero vector
@@ -211,7 +211,7 @@ _start:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

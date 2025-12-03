@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/05_Stack_Operations.s
 //  Stack Operations: stack pointer, push/pop, frame pointers
-//  SECURITY: Stack must be 16-byte aligned, prevent stack overflow
+//  Demonstrates stack management with proper alignment and overflow prevention
 
 .global _start
 .align 4
@@ -180,13 +180,13 @@ stack_overflow_error:
 stack_ok:
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  STACK MANAGEMENT BEST PRACTICES
     //  ============================================
-    //  1. Always maintain 16-byte stack alignment
-    //  2. Check stack bounds before large allocations
-    //  3. Clear sensitive data from stack before deallocation
-    //  4. Validate stack pointer before dereferencing
-    //  5. Use frame pointers for debugging in production
+    //  Always maintain 16-byte stack alignment (ABI requirement)
+    //  Check stack bounds before large allocations to prevent stack overflow
+    //  Clear sensitive data from stack before deallocation
+    //  Validate stack pointer before dereferencing
+    //  Use frame pointers for debugging and stack unwinding
     
     //  Clear sensitive stack data
     sub     sp, sp, #16

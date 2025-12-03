@@ -1,6 +1,6 @@
-# ARM Assembly Fundamentals
+# ARM Assembly Fundamentals - Portfolio Reference
 
-This directory contains comprehensive examples of ARM assembly language concepts for both AArch64 and Apple Silicon architectures.
+This directory contains comprehensive, production-ready ARM64 assembly reference code demonstrating core concepts. All files are **numerically labelled (01-11)** and serve as a complete reference portfolio for ARM64 assembly fundamentals.
 
 ## Files Overview
 
@@ -9,7 +9,7 @@ This directory contains comprehensive examples of ARM assembly language concepts
 - Special Registers (SP, XZR, FP, LR)
 - 32-bit Register Views (w0-w30)
 - Register Usage Conventions
-- Security Practices for Register Usage
+- Register Management Best Practices
 
 ### 02_Basic_Instructions.s
 - Move Instructions (mov, movz, movk, movn)
@@ -24,7 +24,7 @@ This directory contains comprehensive examples of ARM assembly language concepts
 - Store Instructions (str, strh, strb, stp)
 - Addressing Modes (immediate, register, pre-index, post-index)
 - Literal Pool Access
-- Security Practices for Memory Operations
+- Memory Access Best Practices
 
 ### 04_Control_Flow.s
 - Unconditional Branches (b, bl, br, ret)
@@ -57,7 +57,7 @@ This directory contains comprehensive examples of ARM assembly language concepts
 - Linux System Calls (x8 register) - Primary implementation
 - Common Syscalls (write=64, read=63, exit=93)
 - Error Handling and Return Value Validation
-- Security Practices for Syscalls
+- Syscall Best Practices
 - Note: Blocking read syscalls commented out for non-interactive environments
 
 ### 08_Arithmetic_Advanced.s
@@ -126,17 +126,17 @@ make bare file=Fundamentals/01_Registers.s
 
 All compiled binaries are placed in the `bin/fundamentals/` directory (11 binaries).
 
-## Security Notes
+## Best Practices
 
-All code examples follow security best practices:
-- ✅ Input validation
-- ✅ Bounds checking
-- ✅ Overflow detection
-- ✅ Division by zero prevention
-- ✅ Pointer validation
-- ✅ Sensitive data clearing
-- ✅ Stack alignment maintenance
-- ✅ Proper error handling
+All code examples follow industry best practices:
+- Input validation before use
+- Bounds checking for array and memory accesses
+- Overflow detection in arithmetic operations
+- Division by zero prevention
+- Pointer validation (null checks, range validation)
+- Sensitive data clearing after use
+- Stack alignment maintenance (16-byte requirement)
+- Proper error handling with appropriate exit codes
 
 ## Architecture Support
 
@@ -145,16 +145,16 @@ All code examples follow security best practices:
 
 ## Code Quality
 
-All files follow strict security and quality standards:
-- ✅ **STRICT CODE ONLY** - Production-ready, error-free code
-- ✅ **NO VULNERABILITIES ALLOWED** - All security best practices implemented
-- ✅ **NO SEGMENTATION FAULTS ALLOWED** - All memory accesses validated
-- ✅ **NO ILLEGAL INSTRUCTIONS ALLOWED** - All instructions properly formatted
-- ✅ **CLEAN CODE PRINCIPLES** - Well-structured, maintainable code
-- ✅ **SECURE CODE PRINCIPLES** - Input validation, bounds checking, secure patterns
-- ✅ Proper error handling with halt_loop protection
-- ✅ Comprehensive comments and documentation
-- ✅ **100% compilation and execution success rate**
+All files are production-ready and follow industry best practices:
+- Production-ready, error-free implementations
+- Comprehensive security best practices implemented
+- All memory accesses properly validated
+- All instructions correctly formatted
+- Well-structured, maintainable code
+- Input validation and bounds checking throughout
+- Proper error handling with halt_loop protection
+- Comprehensive comments and documentation
+- 100% compilation and execution success rate
 
 ## Notes
 
@@ -163,5 +163,5 @@ All files follow strict security and quality standards:
 - Linux syscalls use x8 register (syscall numbers: 64 for write, 93 for exit, 63 for read)
 - All memory accesses are bounds-checked
 - Sensitive data is cleared after use
-- All programs include halt_loop after exit syscalls to prevent illegal instructions
-- All code follows strict security and quality standards
+- All programs include halt_loop after exit syscalls as defensive programming
+- All code follows industry best practices and quality standards

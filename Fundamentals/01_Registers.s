@@ -100,15 +100,16 @@ lr_example_label:
     //  Callee-saved: x19-x28, x29 (FP), x30 (LR) (must be preserved)
     
     //  ============================================
-    //  SECURE PRACTICES
+    //  REGISTER MANAGEMENT BEST PRACTICES
     //  ============================================
-    //  1. Always zero registers containing sensitive data before function return
+    //  Clear registers containing sensitive data before function return
     mov     x0, xzr                  //  Clear return value if not needed
     mov     x1, xzr                  //  Clear argument registers
     
-    //  2. Never use x18 on Apple Silicon (platform reserved)
-    //  3. Maintain 16-byte stack alignment
-    //  4. Preserve callee-saved registers if modifying them
+    //  Platform-specific considerations:
+    //  - x18 is reserved on Apple Silicon (platform register)
+    //  - Maintain 16-byte stack alignment at all times
+    //  - Preserve callee-saved registers (x19-x30) when modifying them
     
     //  Exit with success code
     //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code
@@ -116,6 +117,6 @@ lr_example_label:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop

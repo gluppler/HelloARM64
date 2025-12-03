@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/10_Apple_Silicon_Specific.s
 //  Apple Silicon Specific Features and Optimizations
-//  SECURITY: Follow Apple's security guidelines, use proper syscall conventions
+//  Demonstrates Apple Silicon-specific features and platform conventions
 
 .global _start
 .align 4
@@ -153,10 +153,10 @@ _start:
     //  ret
     
     //  ============================================
-    //  SECURITY PRACTICES (Apple Silicon)
+    //  APPLE SILICON BEST PRACTICES
     //  ============================================
-    //  1. Never use x18 register (platform reserved)
-    //  2. Always maintain 16-byte stack alignment
+    //  Never use x18 register (platform reserved on Apple Silicon)
+    //  Always maintain 16-byte stack alignment (ABI requirement)
     //  3. Use proper syscall conventions (x16, not x8)
     //  4. Validate all syscall parameters
     //  5. Use page-relative addressing for position-independent code
@@ -173,7 +173,7 @@ _start:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

@@ -2,7 +2,7 @@
 .text
 //  Advanced/03_Advanced_SIMD.s
 //  Advanced SIMD/NEON: Matrix Operations, Advanced Vector Operations
-//  SECURITY: All vector operations are bounds-checked and validated
+//  Demonstrates advanced vector operations with proper bounds checking and validation
 
 .global _start
 .align 4
@@ -199,13 +199,13 @@ _start:
     uzp2    v20.4s, v17.4s, v18.4s  //  Extract odd elements
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  VECTOR OPERATION BEST PRACTICES
     //  ============================================
-    //  1. Validate vector sizes before operations
-    //  2. Check alignment (16-byte for vectors)
-    //  3. Bounds check array accesses
-    //  4. Clear sensitive vector data
-    //  5. Validate input ranges
+    //  Validate vector sizes before operations to prevent out-of-bounds access
+    //  Check alignment (16-byte alignment required for vector operations)
+    //  Bounds check array accesses to ensure valid memory access
+    //  Clear sensitive vector data after use
+    //  Validate input ranges to prevent invalid operations
     
     //  Validate alignment
     adr     x17, secure_vec
@@ -227,7 +227,7 @@ alignment_error:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
     
@@ -237,7 +237,7 @@ continue:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

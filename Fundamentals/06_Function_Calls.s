@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/06_Function_Calls.s
 //  Function Calls: calling conventions, parameter passing, return values
-//  SECURITY: Follow ABI, preserve callee-saved registers, validate parameters
+//  Demonstrates function calling conventions following AArch64 ABI
 
 .global _start
 .align 4
@@ -120,7 +120,7 @@ _start:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

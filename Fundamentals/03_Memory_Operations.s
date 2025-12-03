@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/03_Memory_Operations.s
 //  Memory Operations: ldr, str, ldp, stp, addressing modes
-//  SECURITY: All memory accesses are bounds-checked and aligned
+//  Demonstrates memory access patterns with proper bounds checking and alignment
 
 .global _start
 .align 4
@@ -121,13 +121,13 @@ _start:
     ldr     x1, [x0]                 //  Load value from data section
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  MEMORY ACCESS BEST PRACTICES
     //  ============================================
-    //  1. Always validate addresses before dereferencing
-    //  2. Ensure stack alignment (16-byte)
-    //  3. Bounds check array accesses
-    //  4. Clear sensitive data from memory
-    //  5. Use appropriate access size (avoid over-reading)
+    //  Always validate addresses before dereferencing
+    //  Ensure stack alignment (16-byte requirement)
+    //  Bounds check array accesses to prevent out-of-bounds reads
+    //  Clear sensitive data from memory after use
+    //  Use appropriate access size to avoid reading beyond intended data
     
     //  Clear sensitive data
     mov     x0, xzr
@@ -143,7 +143,7 @@ _start:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
 
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

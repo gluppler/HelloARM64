@@ -2,7 +2,7 @@
 .text
 //  Advanced/07_Floating_Point_Advanced.s
 //  Advanced Floating Point: Rounding Modes, Exceptions, Advanced Operations
-//  SECURITY: All FP operations validate inputs, handle exceptions, prevent NaN propagation
+//  Demonstrates floating-point operations with input validation and exception handling
 
 .global _start
 .align 4
@@ -212,13 +212,13 @@ check_div_zero:
     fadd    s9, s9, s20                //  Add fourth element (final sum)
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  FLOATING-POINT BEST PRACTICES
     //  ============================================
-    //  1. Validate FP inputs (check for NaN, Inf)
-    //  2. Prevent division by zero
-    //  3. Check for overflow/underflow
-    //  4. Sanitize FP results
-    //  5. Handle exceptions properly
+    //  Validate FP inputs (check for NaN, Inf) before operations
+    //  Prevent division by zero in floating-point division
+    //  Check for overflow/underflow in critical calculations
+    //  Sanitize FP results to ensure valid values
+    //  Handle floating-point exceptions appropriately
     
     //  Secure FP division
 secure_fp_division:
@@ -255,7 +255,7 @@ fp_result_nan:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
     
@@ -267,7 +267,7 @@ division_by_zero_fp:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

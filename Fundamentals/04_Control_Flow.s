@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/04_Control_Flow.s
 //  Control Flow: branches, conditionals, loops
-//  SECURITY: All branches are validated, no infinite loops
+//  Demonstrates control flow patterns with proper branch validation
 
 .global _start
 .align 4
@@ -213,13 +213,13 @@ inner_end:
 outer_end:
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  CONTROL FLOW BEST PRACTICES
     //  ============================================
-    //  1. Always validate loop bounds to prevent infinite loops
-    //  2. Check array bounds before indexing
-    //  3. Validate branch targets (prevent code injection)
-    //  4. Use secure comparison patterns
-    //  5. Clear sensitive registers after use
+    //  Always validate loop bounds to prevent infinite loops
+    //  Check array bounds before indexing to prevent out-of-bounds access
+    //  Validate branch targets to ensure they point to valid code locations
+    //  Use appropriate comparison patterns for the data type
+    //  Clear sensitive registers after use
     
     //  Exit
     //  Linux syscall: x8 = 93 (SYS_exit), x0 = exit code

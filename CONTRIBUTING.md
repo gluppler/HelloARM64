@@ -45,20 +45,34 @@ Please follow these principles when contributing.
 ## Example Guides
 Each repository includes a `CONTRIBUTING_EXAMPLES.md` file that shows how to apply these principles in its specific language or environment.
 
-## Reference Code
-This repository includes two comprehensive reference directories:
-- **`Fundamentals/`**: Core ARM64 assembly concepts (11 files)
-- **`Advanced/`**: Advanced ARM64 assembly concepts (11 files)
+## Portfolio Structure
+This repository is organized as an ARM64 assembly portfolio:
+
+### Numerically-Labelled References
+- **`Fundamentals/`**: Core ARM64 assembly concepts (11 files, numbered 01-11)
+- **`Advanced/`**: Advanced ARM64 assembly concepts (11 files, numbered 01-11)
 - **Total**: 22 comprehensive reference files, 5,616 lines of production-ready code
 - **Compiled Binaries**: 22 (11 in `bin/fundamentals/`, 11 in `bin/advanced/`)
 
+### Cheatsheets
+- **`Cheatsheets/`**: Quick reference guides (3 cheatsheets + README)
+  - ARM64 Opcodes reference
+  - ARM64 Instruction Set reference
+  - ARM64 Syscalls reference
+
+### Projects Portfolio
+- **`Projects/`**: Standalone portfolio pieces (unlabelled, independent projects)
+  - Projects are NOT numerically labelled
+  - Each project is a complete, standalone implementation
+  - Demonstrates real-world ARM64 assembly applications
+
 All reference code follows these contributing guidelines and serves as examples of best practices. All files:
-- ✅ **STRICT CODE ONLY** - Production-ready, error-free code
-- ✅ **NO VULNERABILITIES ALLOWED** - All security best practices implemented
-- ✅ **NO SEGMENTATION FAULTS ALLOWED** - All memory accesses validated
-- ✅ **NO ILLEGAL INSTRUCTIONS ALLOWED** - All instructions properly formatted
-- ✅ **CLEAN CODE PRINCIPLES** - Well-structured, maintainable code
-- ✅ **SECURE CODE PRINCIPLES** - Input validation, bounds checking, secure patterns
-- ✅ Include comprehensive error handling with halt_loop protection
-- ✅ **100% compilation and execution success rate** - All 22 files tested and working
-- ✅ Are ready for production use
+- Production-ready, error-free implementations
+- Comprehensive security best practices implemented
+- All memory accesses properly validated
+- All instructions correctly formatted
+- Well-structured, maintainable code
+- Input validation and bounds checking throughout
+- Comprehensive error handling with halt_loop protection
+- 100% compilation and execution success rate - All 22 files tested and working
+- Ready for production use

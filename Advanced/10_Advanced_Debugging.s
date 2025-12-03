@@ -2,7 +2,7 @@
 .text
 //  Advanced/10_Advanced_Debugging.s
 //  Advanced Debugging: Breakpoints, Watchpoints, Debug Registers, Tracing
-//  SECURITY: Debug code must not expose sensitive information
+//  Demonstrates debugging techniques while protecting sensitive information
 
 .global _start
 .align 4
@@ -237,13 +237,13 @@ debug_save_registers:
     add     sp, sp, #128
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  DEBUGGING BEST PRACTICES
     //  ============================================
-    //  1. Remove debug code from production
-    //  2. Don't expose sensitive data in debug output
-    //  3. Disable debug features in release builds
-    //  4. Validate debug inputs
-    //  5. Secure debug interfaces
+    //  Remove debug code from production builds
+    //  Don't expose sensitive data in debug output
+    //  Disable debug features in release builds
+    //  Validate debug inputs to prevent misuse
+    //  Secure debug interfaces to prevent unauthorized access
     
     //  Production-safe debugging (no sensitive data)
     adr     x25, safe_debug_data
@@ -256,7 +256,7 @@ debug_save_registers:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

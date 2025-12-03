@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/11_Security_Practices.s
 //  Security Best Practices for ARM Assembly
-//  SECURITY: This file demonstrates secure coding patterns
+//  Demonstrates secure coding patterns and defensive programming techniques
 
 .global _start
 .align 4
@@ -270,7 +270,7 @@ syscall_error:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
     
@@ -278,27 +278,28 @@ syscall_ok:
     //  ============================================
     //  SECURE CODING CHECKLIST
     //  ============================================
-    //  ✓ Validate all inputs
-    //  ✓ Check array bounds
-    //  ✓ Prevent buffer overflows
-    //  ✓ Check for division by zero
-    //  ✓ Detect integer overflow
-    //  ✓ Validate pointers (not NULL, in range)
-    //  ✓ Clear sensitive data
-    //  ✓ Maintain stack alignment
-    //  ✓ Use stack canaries (where appropriate)
-    //  ✓ Validate syscall parameters
-    //  ✓ Check syscall return values
-    //  ✓ Use secure memory operations
-    //  ✓ Follow calling conventions
-    //  ✓ Preserve callee-saved registers
+    //  Best practices demonstrated in this file:
+    //  - Validate all inputs before use
+    //  - Check array bounds to prevent out-of-bounds access
+    //  - Prevent buffer overflows with bounds checking
+    //  - Check for division by zero before division operations
+    //  - Detect integer overflow using flag checks
+    //  - Validate pointers (not NULL, within valid range)
+    //  - Clear sensitive data from memory and registers
+    //  - Maintain 16-byte stack alignment (ABI requirement)
+    //  - Use stack canaries where appropriate for overflow detection
+    //  - Validate syscall parameters before invocation
+    //  - Check syscall return values for errors
+    //  - Use appropriate memory operations with proper alignment
+    //  - Follow AArch64 calling conventions
+    //  - Preserve callee-saved registers (x19-x30)
     
     //  Exit
     mov     x0, #0
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

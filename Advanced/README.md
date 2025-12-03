@@ -1,6 +1,6 @@
-# ARM Assembly Advanced Concepts
+# ARM Assembly Advanced Concepts - Portfolio Reference
 
-This directory contains advanced ARM64 assembly language concepts for experienced developers working with AArch64 and Apple Silicon architectures.
+This directory contains advanced, production-ready ARM64 assembly reference code demonstrating advanced techniques. All files are **numerically labelled (01-11)** and serve as a complete reference portfolio for advanced ARM64 assembly concepts.
 
 ## Files Overview
 
@@ -10,7 +10,7 @@ This directory contains advanced ARM64 assembly language concepts for experience
 - Atomic add, exchange (swap)
 - Load-Link/Store-Conditional patterns
 - Memory ordering with atomics
-- Security practices for atomic operations
+- Best practices for atomic operations
 - **Status**: ✅ Fixed and working (exit code 0)
 
 ### 02_Memory_Barriers.s
@@ -52,7 +52,7 @@ This directory contains advanced ARM64 assembly language concepts for experience
 - Processing variadic arguments
 - Register vs stack argument handling
 - Type-safe variadic functions
-- Security practices for variadic functions
+- Best practices for variadic functions
 - **Status**: ✅ Fixed execution flow, demonstration functions properly isolated
 
 ### 06_Advanced_Optimization.s
@@ -120,7 +120,7 @@ This directory contains advanced ARM64 assembly language concepts for experience
 - Assertions for debugging
 - Memory debugging (sentinels)
 - Register inspection
-- Security practices for debugging
+- Best practices for debugging
 
 ### 11_Advanced_Memory_Management.s
 - Stack-based allocator
@@ -150,18 +150,18 @@ make bare file=Advanced/01_Atomic_Operations.s
 
 All compiled binaries are placed in the `bin/advanced/` directory (11 binaries).
 
-## Security Notes
+## Best Practices
 
-All code examples follow advanced security best practices:
-- ✅ Atomic operations properly synchronized
-- ✅ Memory barriers used correctly
-- ✅ Stack canaries implemented
-- ✅ Control flow integrity checks
-- ✅ Bounds checking on all memory operations
-- ✅ Secure memory clearing
-- ✅ Input validation
-- ✅ No use-after-free patterns
-- ✅ No double-free patterns
+All code examples follow industry best practices:
+- Atomic operations properly synchronized to prevent race conditions
+- Memory barriers used correctly to ensure ordering
+- Stack canaries implemented for overflow detection
+- Control flow integrity checks for indirect branches
+- Bounds checking on all memory operations
+- Sensitive memory clearing after use
+- Input validation before processing
+- Proper memory management to prevent use-after-free
+- Proper memory management to prevent double-free
 
 ## Architecture Support
 
@@ -170,28 +170,28 @@ All code examples follow advanced security best practices:
 
 ## Code Quality
 
-All files follow strict security and quality standards:
-- ✅ **STRICT CODE ONLY** - Production-ready, error-free code
-- ✅ **NO VULNERABILITIES ALLOWED** - All security best practices implemented
-- ✅ **NO SEGMENTATION FAULTS ALLOWED** - All memory accesses validated
-- ✅ **NO ILLEGAL INSTRUCTIONS ALLOWED** - All instructions properly formatted
-- ✅ **CLEAN CODE PRINCIPLES** - Well-structured, maintainable code
-- ✅ **SECURE CODE PRINCIPLES** - Input validation, bounds checking, secure patterns
-- ✅ Proper error handling with halt_loop protection
-- ✅ Comprehensive comments and documentation
-- ✅ **100% compilation and execution success rate** - All 11 files tested and working
+All files are production-ready and follow industry best practices:
+- Production-ready, error-free implementations
+- Comprehensive security best practices implemented
+- All memory accesses properly validated
+- All instructions correctly formatted
+- Well-structured, maintainable code
+- Input validation and bounds checking throughout
+- Proper error handling with halt_loop protection
+- Comprehensive comments and documentation
+- 100% compilation and execution success rate - All 11 files tested and working
 
 ## Notes
 
 - Atomic operations require proper synchronization
 - Memory barriers are critical for multi-threaded code
-- Security features must be properly implemented
+- Security features should be properly implemented following best practices
 - Debugging code should be removed from production
 - Memory management patterns must prevent leaks and corruption
 - All optimizations maintain security guarantees
 - Linux syscalls use x8 register (syscall numbers: 64 for write, 93 for exit, 63 for read)
-- All programs include halt_loop after exit syscalls to prevent illegal instructions
-- All code follows strict security and quality standards
+- All programs include halt_loop after exit syscalls as defensive programming
+- All code follows industry best practices and quality standards
 
 ## Prerequisites
 

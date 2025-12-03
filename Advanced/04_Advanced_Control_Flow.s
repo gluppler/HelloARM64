@@ -2,7 +2,7 @@
 .text
 //  Advanced/04_Advanced_Control_Flow.s
 //  Advanced Control Flow: Predication, Advanced Branching, Branch Prediction
-//  SECURITY: All control flow is validated, no infinite loops, secure patterns
+//  Demonstrates advanced control flow patterns with proper validation
 
 .global _start
 .align 4
@@ -219,13 +219,13 @@ pipeline_epilogue:
     csel    x29, x30, x29, gt        //  x29 = (x29 > x30) ? x30 : x29
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  CONTROL FLOW BEST PRACTICES
     //  ============================================
-    //  1. Validate indirect branch targets
-    //  2. Bounds check jump table indices
-    //  3. Prevent infinite loops
-    //  4. Validate computed addresses
-    //  5. Use secure control flow patterns
+    //  Validate indirect branch targets to ensure they point to valid code
+    //  Bounds check jump table indices to prevent out-of-bounds jumps
+    //  Ensure loops have proper termination conditions
+    //  Validate computed addresses before using them as branch targets
+    //  Use appropriate control flow patterns for the use case
     
     //  Validate indirect branch target (demonstration - skip validation for demo)
     //  In production, would validate address range, alignment, etc.
@@ -238,7 +238,7 @@ valid_target:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
     
@@ -248,7 +248,7 @@ invalid_target_adv:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
 

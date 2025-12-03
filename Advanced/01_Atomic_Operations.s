@@ -2,7 +2,7 @@
 .text
 //  Advanced/01_Atomic_Operations.s
 //  Atomic Memory Operations: Load-Exclusive, Store-Exclusive, Compare-and-Swap
-//  SECURITY: All atomic operations are properly synchronized, no race conditions
+//  Demonstrates atomic operations with proper synchronization to prevent race conditions
 
 .global _start
 .align 4
@@ -121,7 +121,7 @@ cas_failed:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
     
@@ -205,13 +205,13 @@ llsc_loop:
     stlxr   w4, x3, [x1]             //  Store with release semantics
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  ATOMIC OPERATION BEST PRACTICES
     //  ============================================
-    //  1. Always check return value of store-exclusive
-    //  2. Implement retry loops for failed stores
-    //  3. Use appropriate memory ordering (acquire/release)
-    //  4. Validate addresses before atomic operations
-    //  5. Prevent ABA problem in lock-free algorithms
+    //  Always check return value of store-exclusive (0 = success, 1 = failure)
+    //  Implement retry loops for failed stores to handle contention
+    //  Use appropriate memory ordering (acquire/release) for synchronization
+    //  Validate addresses before atomic operations to ensure valid memory access
+    //  Consider ABA problem in lock-free algorithms and use version numbers if needed
     
     //  Validate address before atomic operation
     adr     x5, atomic_var
@@ -229,7 +229,7 @@ llsc_loop:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
     
@@ -238,7 +238,7 @@ invalid_address:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_invalid:
     b       halt_loop_invalid
 

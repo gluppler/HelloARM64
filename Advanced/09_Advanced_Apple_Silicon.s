@@ -2,7 +2,7 @@
 .text
 //  Advanced/09_Advanced_Apple_Silicon.s
 //  Advanced Apple Silicon Features: PAC, AMX, Advanced Performance Features
-//  SECURITY: All Apple-specific features used securely
+//  Demonstrates Apple Silicon-specific features following platform guidelines
 
 .global _start
 .align 4
@@ -136,7 +136,7 @@ apple_cache_end:
     //  ============================================
     
     //  Secure Enclave integration (conceptual)
-    //  Apple Silicon includes Secure Enclave for security
+    //  Apple Silicon includes Secure Enclave for hardware-backed security features
     
     //  ============================================
     //  APPLE SILICON MEMORY PROTECTION
@@ -175,20 +175,20 @@ apple_cache_end:
     stp     x16, x17, [x15]         //  Store pair (efficient)
     
     //  ============================================
-    //  SECURITY PRACTICES (Apple Silicon)
+    //  APPLE SILICON BEST PRACTICES
     //  ============================================
-    //  1. Use PAC for pointer protection
-    //  2. Follow Apple's security guidelines
-    //  3. Use secure memory patterns
-    //  4. Validate all inputs
-    //  5. Clear sensitive data
+    //  Use Pointer Authentication Code (PAC) for pointer protection where available
+    //  Follow Apple's platform guidelines and conventions
+    //  Use appropriate memory access patterns for the platform
+    //  Validate all inputs before use
+    //  Clear sensitive data from memory and registers after use
     
     //  Exit
     mov     x0, #0
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
     
@@ -198,7 +198,7 @@ pac_target:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
 

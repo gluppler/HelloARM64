@@ -149,24 +149,24 @@ All programs include `halt_loop:` after exit syscalls to prevent illegal instruc
 
 ---
 
-## Reference Directories
+## Portfolio Structure
 
-### Fundamentals Reference
+### Fundamentals Reference (Numerically Labelled 01-11)
 
-The `Fundamentals/` directory contains comprehensive, production-ready examples covering all core ARM64 assembly concepts. These files serve as both learning resources and reference implementations, demonstrating:
+The `Fundamentals/` directory contains comprehensive, production-ready examples covering all core ARM64 assembly concepts. These files are **numerically labelled (01-11)** and serve as a complete reference portfolio, demonstrating:
 
 - Complete ARM64 instruction coverage
-- Security best practices (no vulnerabilities, no segfaults, no illegal instructions)
-- Clean code principles
+- Industry best practices (proper validation, bounds checking, correct instruction usage)
+- Well-structured, maintainable code
 - Proper error handling with halt_loop protection
 - Linux syscall conventions
 - Comprehensive input validation and bounds checking
 
 All Fundamentals examples are compiled, tested, and ready for use as reference implementations. All 11 files compile and execute without errors. Binaries are located in `bin/fundamentals/`.
 
-### Advanced Reference
+### Advanced Reference (Numerically Labelled 01-11)
 
-The `Advanced/` directory contains advanced ARM64 assembly concepts for experienced developers, including:
+The `Advanced/` directory contains advanced ARM64 assembly concepts for experienced developers. These files are **numerically labelled (01-11)** and serve as a complete reference portfolio, including:
 
 - Atomic operations and synchronization (01_Atomic_Operations.s - Fixed CAS initialization)
 - Memory barriers and ordering
@@ -182,15 +182,30 @@ The `Advanced/` directory contains advanced ARM64 assembly concepts for experien
 
 All Advanced examples are compiled, tested, and demonstrate production-ready advanced patterns. All 11 files compile and execute without errors. Binaries are located in `bin/advanced/`.
 
-### Code Quality Standards
+### Cheatsheets
 
-All code in both directories follows strict standards:
-- ✅ STRICT CODE ONLY
-- ✅ NO VULNERABILITIES ALLOWED
-- ✅ NO SEGMENTATION FAULTS ALLOWED
-- ✅ NO ILLEGAL INSTRUCTIONS ALLOWED
-- ✅ CLEAN CODE PRINCIPLES
-- ✅ SECURE CODE PRINCIPLES
-- ✅ All files checked and refactored until they compile and execute without any errors or issues
+The `Cheatsheets/` directory contains quick reference guides:
+- **01_ARM64_Opcodes.md**: Complete opcode reference with examples
+- **02_ARM64_Instruction_Set.md**: Comprehensive instruction set reference
+- **03_ARM64_Syscalls.md**: Linux syscall reference
+
+### Projects Portfolio
+
+The `Projects/` directory contains standalone portfolio pieces. **Projects are NOT numerically labelled** and represent independent implementations:
+- Each project is a complete, standalone piece
+- Demonstrates real-world ARM64 assembly applications
+- Follows industry best practices and quality standards
+- Includes comprehensive documentation
+
+### Code Quality
+
+All code in both directories follows industry best practices:
+- Production-ready, error-free implementations
+- Comprehensive security best practices
+- All memory accesses properly validated
+- All instructions correctly formatted
+- Well-structured, maintainable code
+- Input validation and bounds checking throughout
+- All files tested and verified to compile and execute without errors
 
 ---

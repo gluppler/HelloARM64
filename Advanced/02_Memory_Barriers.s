@@ -2,7 +2,7 @@
 .text
 //  Advanced/02_Memory_Barriers.s
 //  Memory Barriers and Ordering: DMB, DSB, ISB
-//  SECURITY: Proper memory ordering prevents security vulnerabilities from reordering
+//  Demonstrates memory ordering with barriers to ensure correct execution order
 
 .global _start
 .align 4
@@ -171,13 +171,13 @@ consumer_loop:
     //  dsb     sy                      //  Wait for write to complete
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  MEMORY BARRIER BEST PRACTICES
     //  ============================================
-    //  1. Use appropriate barrier strength (DMB vs DSB)
-    //  2. Use correct sync domain (ish for SMP)
-    //  3. Place barriers correctly in critical sections
-    //  4. Use acquire/release semantics with atomics
-    //  5. Ensure barriers in multi-threaded code
+    //  Use appropriate barrier strength (DMB for ordering, DSB for completion)
+    //  Use correct sync domain (ish for SMP systems)
+    //  Place barriers correctly in critical sections to ensure ordering
+    //  Use acquire/release semantics with atomics for efficient synchronization
+    //  Ensure barriers are present in multi-threaded code where ordering matters
     
     //  Example: Secure flag update pattern
     adr     x25, secure_flag
@@ -204,7 +204,7 @@ consumer_loop:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

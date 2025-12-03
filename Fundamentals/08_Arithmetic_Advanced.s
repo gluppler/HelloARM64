@@ -2,7 +2,7 @@
 .text
 //  Fundamentals/08_Arithmetic_Advanced.s
 //  Advanced Arithmetic: extended operations, bit manipulation, division
-//  SECURITY: Check for overflow, validate operands, prevent division by zero
+//  Demonstrates arithmetic operations with overflow detection and division by zero prevention
 
 .global _start
 .align 4
@@ -52,7 +52,7 @@ _start:
     mov     x14, #3
     sdiv    x15, x13, x14             //  x15 = x13 / x14 (signed)
     
-    //  Division by zero check (SECURITY)
+    //  Division by zero check
     mov     x16, #100
     mov     x17, #0
     cmp     x17, #0
@@ -139,7 +139,7 @@ _start:
     //  ============================================
     //  OVERFLOW DETECTION
     //  ============================================
-    //  SECURITY: Check for arithmetic overflow
+    //  Check for arithmetic overflow in critical operations
     
     //  Check addition overflow
     movz    x12, #0xFFFF             //  Max positive signed 64-bit (0x7FFFFFFFFFFFFFFF)
@@ -216,12 +216,12 @@ already_positive:
     udiv    x1, x0, x28              //  x1 = (a + b/2) / b (rounded)
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  ARITHMETIC BEST PRACTICES
     //  ============================================
-    //  1. Always check for division by zero
-    //  2. Validate operands before arithmetic operations
-    //  3. Check for overflow in critical operations
-    //  4. Use appropriate signed/unsigned operations
+    //  Always check for division by zero before division operations
+    //  Validate operands before arithmetic operations
+    //  Check for overflow in critical operations using flag checks
+    //  Use appropriate signed/unsigned operations based on data semantics
     //  5. Clear sensitive intermediate values
     
     //  Clear working registers

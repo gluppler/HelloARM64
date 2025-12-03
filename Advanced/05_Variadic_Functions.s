@@ -2,7 +2,7 @@
 .text
 //  Advanced/05_Variadic_Functions.s
 //  Variadic Functions: Variable Argument Lists (va_list, va_start, va_arg, va_end)
-//  SECURITY: All variadic arguments are validated, type-checked, bounds-checked
+//  Demonstrates variadic function implementation with argument validation and bounds checking
 
 .global _start
 .align 4
@@ -215,13 +215,13 @@ invalid_count:
     ret
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  VARIADIC FUNCTION BEST PRACTICES
     //  ============================================
-    //  1. Always validate argument count
-    //  2. Type-check each argument
-    //  3. Bounds check argument access
-    //  4. Validate format strings
-    //  5. Prevent format string vulnerabilities
+    //  Always validate argument count to prevent reading beyond available arguments
+    //  Type-check each argument to ensure correct interpretation
+    //  Bounds check argument access to prevent out-of-bounds reads
+    //  Validate format strings to ensure they match the provided arguments
+    //  Use format string validation to prevent format string vulnerabilities
     
     //  Example: Secure variadic function with validation
 secure_variadic:
@@ -299,7 +299,7 @@ exit_demo:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
 

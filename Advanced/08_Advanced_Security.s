@@ -2,7 +2,7 @@
 .text
 //  Advanced/08_Advanced_Security.s
 //  Advanced Security: ASLR, Stack Protection, Control Flow Integrity, Secure Patterns
-//  SECURITY: This file demonstrates advanced security techniques
+//  Demonstrates advanced security techniques and defensive programming patterns
 
 .global _start
 .align 4
@@ -91,7 +91,7 @@ stack_corruption_detected:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_stack:
     b       halt_loop_stack
     
@@ -180,7 +180,7 @@ invalid_return_address:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_ra:
     b       halt_loop_ra
     
@@ -264,7 +264,7 @@ out_of_bounds:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_bounds:
     b       halt_loop_bounds
     
@@ -310,7 +310,7 @@ addition_overflow:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_overflow:
     b       halt_loop_overflow
     
@@ -336,7 +336,7 @@ exit_success:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
     
@@ -347,7 +347,7 @@ invalid_format_string:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_invalid:
     b       halt_loop_invalid
 

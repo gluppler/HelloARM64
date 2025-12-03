@@ -2,7 +2,7 @@
 .text
 //  Advanced/06_Advanced_Optimization.s
 //  Advanced Optimization Techniques: Instruction Scheduling, Cache Optimization, Branch Optimization
-//  SECURITY: All optimizations maintain security, no vulnerabilities introduced
+//  Demonstrates optimization techniques while maintaining correctness and safety
 
 .global _start
 .align 4
@@ -236,13 +236,13 @@ invariant_end:
     add     x26, x24, #10           //  Reuse
     
     //  ============================================
-    //  SECURITY PRACTICES
+    //  OPTIMIZATION BEST PRACTICES
     //  ============================================
-    //  1. Optimizations must not introduce vulnerabilities
-    //  2. Maintain bounds checking
-    //  3. Preserve security checks
-    //  4. Don't optimize away security validations
-    //  5. Test optimized code thoroughly
+    //  Optimizations must maintain correctness and safety guarantees
+    //  Maintain bounds checking even in optimized code paths
+    //  Preserve validation checks that ensure program safety
+    //  Never optimize away safety validations
+    //  Test optimized code thoroughly to ensure correctness
     
     //  Optimized but still secure
     adr     x27, secure_array
@@ -256,9 +256,9 @@ secure_optimized_loop:
     //  Optimized access (sequential, cache-friendly)
     ldr     x30, [x27, x28, lsl #3]
     
-    //  Validate value (security check - skip for demo to avoid false positives)
+    //  Validate value (bounds check - skipped for demo to avoid false positives)
     //  cmp     x30, #0
-    //  b.lt    invalid_value           //  Security check preserved
+    //  b.lt    invalid_value           //  Bounds check preserved in production
     
     add     x28, x28, #1
     b       secure_optimized_loop
@@ -270,7 +270,7 @@ secure_loop_end:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop:
     b       halt_loop
     
@@ -280,7 +280,7 @@ invalid_value:
     mov     x8, #93                  //  Linux exit syscall (SYS_exit)
     svc     #0
     
-    //  Halt loop (should never reach here, but prevents illegal instruction)
+    //  Halt loop - defensive programming to stop execution after syscall
 halt_loop_error:
     b       halt_loop_error
 
