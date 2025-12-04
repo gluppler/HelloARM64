@@ -1,0 +1,39 @@
+# Core dump files
+*.core
+core
+core.*
+
+# Temporary files
+*.tmp
+*.swp
+*~
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Build artifacts
+*.o
+*.a
+*.so
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Test files
+test.txt
+*.test
+
+# Temporary scripts
+update_*.py
+update_*.sh
