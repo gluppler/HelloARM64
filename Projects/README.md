@@ -25,11 +25,37 @@ A comprehensive collection of algorithms implemented in ARM64 assembly with C/As
 ARM64 implementations of standard binary utilities.
 
 **Location**: `Projects/Binutils/`  
-**Status**: ✅ Complete - 13 utility implementations
+**Status**: ✅ Complete - 14 utility implementations
 
 **Contents**: addr2line, ar, c++filt, elfedit, gprof, ld, nm, objcopy, objdump, ranlib, readelf, size, strings, strip
 
 **Documentation**: See `Projects/Binutils/README.md` for details.
+
+### TCP
+TCP (Transmission Control Protocol) implementation using C/Assembly interop.
+
+**Location**: `Projects/TCP/`  
+**Status**: ✅ Complete - Production-ready implementation
+
+**Contents**:
+- TCP server with connection handling and client IP display
+- TCP client with multiple message support
+- C/Assembly interop for reliability and performance
+
+**Documentation**: See `Projects/TCP/README.md` for details.
+
+### UDP
+UDP (User Datagram Protocol) implementation using C/Assembly interop.
+
+**Location**: `Projects/UDP/`  
+**Status**: ✅ Complete - Production-ready implementation
+
+**Contents**:
+- UDP server with datagram handling and client IP display
+- UDP client with multiple datagram support
+- C/Assembly interop for reliability and performance
+
+**Documentation**: See `Projects/UDP/README.md` for details.
 
 ## Project Structure
 
@@ -128,8 +154,24 @@ make          # Build all utilities
 make clean    # Clean binaries
 ```
 
+### TCP
+```bash
+cd Projects/TCP
+make          # Build TCP server and client
+make clean    # Clean binaries
+```
+
+### UDP
+```bash
+cd Projects/UDP
+make          # Build UDP server and client
+make clean    # Clean binaries
+```
+
 ## Status
 
 ✅ **Algorithms**: Complete - 20 pure assembly + 14 interop implementations (34 binaries)  
-✅ **Binutils**: Complete - 13 utility implementations  
+✅ **Binutils**: Complete - 14 utility implementations  
+✅ **TCP**: Complete - C/Assembly interop implementation  
+✅ **UDP**: Complete - C/Assembly interop implementation  
 📝 **Ready for more projects**: Add your standalone ARM64 assembly implementations here to showcase your expertise.
