@@ -63,6 +63,17 @@ Standalone ARM64 assembly projects demonstrating real-world applications. Projec
 **Location**: `Projects/`  
 **Structure**: Each project is a complete, standalone implementation with its own documentation.
 
+**Current Projects**:
+- **Algorithms/** - 20 pure assembly algorithms + 14 C/Assembly interop implementations (34 total binaries)
+  - Graph algorithms (BFS, DFS)
+  - Search algorithms (Binary Search, Linear Search)
+  - Mathematical algorithms (Factorial, Fibonacci, GCD, LCM, Prime Check)
+  - String matching (KMP, Rabin-Karp)
+  - Dynamic programming (Knapsack, LCS)
+  - Tree algorithms (Tree Traversal)
+  - Sorting algorithms (Bubble, Heap, Insertion, Merge, Quick, Selection)
+- **Binutils/** - 14 ARM64 implementations of standard binary utilities (addr2line, ar, c++filt, elfedit, gprof, ld, nm, objcopy, objdump, ranlib, readelf, size, strings, strip)
+
 ---
 
 ## 🏗️ Portfolio Structure
@@ -133,10 +144,12 @@ clang -e _start -nostartfiles -o bin/advanced/01_Atomic_Operations Advanced/01_A
 
 - **Fundamentals Reference**: 11 files, production-ready code
 - **Advanced Techniques**: 11 files, production-ready code
-- **Total Assembly Code**: 22 files, 5,616 lines
-- **Compiled Binaries**: 22 (all tested and verified)
+- **Total Reference Code**: 22 files
+- **Projects/Algorithms**: 48 source files (20 pure assembly + 14 interop assembly + 14 interop C)
+- **Projects/Binutils**: 14 binary utility implementations
+- **Compiled Binaries**: 22 (Fundamentals/Advanced) + 34 (Algorithms) + 14 (Binutils) = 70 total
 - **Cheatsheets**: 3 comprehensive reference guides
-- **Projects**: Portfolio pieces (standalone, unlabelled)
+- **Projects**: Complete portfolio pieces with real-world applications
 
 ---
 

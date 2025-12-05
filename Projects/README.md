@@ -6,6 +6,31 @@ This directory contains standalone ARM64 assembly projects demonstrating real-wo
 
 Each project in this directory is a complete, standalone implementation showcasing ARM64 assembly expertise. **Projects are NOT numerically labelled** and represent independent portfolio pieces that demonstrate real-world problem-solving and implementation skills.
 
+## Current Projects
+
+### Algorithms
+A comprehensive collection of algorithms implemented in ARM64 assembly with C/Assembly interop support.
+
+**Location**: `Projects/Algorithms/`  
+**Status**: ✅ Complete - 20 pure assembly + 14 interop implementations
+
+**Contents**:
+- **20 Pure Assembly Algorithms**: Graph algorithms (BFS, DFS), search algorithms (Binary Search, Linear Search), mathematical algorithms (Factorial, Fibonacci, GCD, LCM, Prime Check), string matching (KMP, Rabin-Karp), dynamic programming (Knapsack, LCS), tree algorithms (Tree Traversal), and all 6 sorting algorithms (Bubble, Heap, Insertion, Merge, Quick, Selection)
+- **14 C/Assembly Interop Versions**: For algorithms requiring complex memory management, using heap allocation via C wrappers
+- **34 Total Binaries**: All algorithms build and run successfully
+
+**Documentation**: See `Projects/Algorithms/README.md` for complete details.
+
+### Binutils
+ARM64 implementations of standard binary utilities.
+
+**Location**: `Projects/Binutils/`  
+**Status**: ✅ Complete - 13 utility implementations
+
+**Contents**: addr2line, ar, c++filt, elfedit, gprof, ld, nm, objcopy, objdump, ranlib, readelf, size, strings, strip
+
+**Documentation**: See `Projects/Binutils/README.md` for details.
+
 ## Project Structure
 
 Projects should be organized by category or functionality, with each project containing:
@@ -84,6 +109,27 @@ Projects/
 └── README.md (this file)
 ```
 
+## Building Projects
+
+Each project has its own build system. See individual project README files for build instructions.
+
+### Algorithms
+```bash
+cd Projects/Algorithms
+make          # Build all pure assembly algorithms
+make interop  # Build all interop versions
+make clean    # Clean binaries
+```
+
+### Binutils
+```bash
+cd Projects/Binutils
+make          # Build all utilities
+make clean    # Clean binaries
+```
+
 ## Status
 
-This directory is ready for portfolio projects. Add your standalone ARM64 assembly implementations here to showcase your expertise.
+✅ **Algorithms**: Complete - 20 pure assembly + 14 interop implementations (34 binaries)  
+✅ **Binutils**: Complete - 13 utility implementations  
+📝 **Ready for more projects**: Add your standalone ARM64 assembly implementations here to showcase your expertise.
