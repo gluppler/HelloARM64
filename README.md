@@ -1,260 +1,382 @@
-# ARM64 Assembly Portfolio
+# HelloARM64
 
-A comprehensive portfolio showcasing expertise in ARM64 (AArch64) assembly language programming, featuring production-ready code, complete references, and real-world projects.
+A comprehensive learning repository for ARM64 (AArch64) assembly language programming, featuring complete references, structured curriculum, working examples, and real-world projects.
 
-## 🎯 Portfolio Overview
+## 🎯 Overview
 
-This repository demonstrates mastery of ARM64 assembly through:
-- **Fundamentals Reference** (11 numerically-labelled files) - Core ARM64 concepts
-- **Advanced Techniques** (11 numerically-labelled files) - Advanced ARM64 patterns
-- **Cheatsheets** - Quick reference guides for opcodes, instructions, and syscalls
-- **Projects** - Standalone portfolio pieces (unlabelled, independent implementations)
+HelloARM64 provides a complete learning path from ARM64 assembly fundamentals to advanced topics. **All content is derived from and cross-referenced with the authoritative `references/` directory**, which serves as the single source of truth for all ARM64 concepts.
 
----
+The repository includes:
+- **⭐ References Directory**: Authoritative ARM64 reference documentation (source of truth)
+- **Structured Curriculum**: 10 progressive lessons, all referencing `references/` concepts
+- **Working Examples**: Real, buildable ARM64 assembly code aligned with references
+- **Real-World Projects**: Complete, non-trivial projects using reference-cited concepts
+- **Assessments**: Quizzes, practical tasks, and mastery checklists based on references
+- **Tooling Guides**: Build systems, debugging workflows, cross-compilation
 
-## 📚 Portfolio Contents
+## 📚 Repository Structure
 
-### Fundamentals Reference (Numerically Labelled)
-Complete reference covering all core ARM assembly concepts for AArch64:
-- `01_Registers.s` - Register architecture and usage
-- `02_Basic_Instructions.s` - Core instruction set
-- `03_Memory_Operations.s` - Memory access patterns
-- `04_Control_Flow.s` - Branching and loops
-- `05_Stack_Operations.s` - Stack management
-- `06_Function_Calls.s` - Calling conventions
-- `07_System_Calls.s` - Linux syscalls
-- `08_Arithmetic_Advanced.s` - Advanced arithmetic
-- `09_SIMD_NEON.s` - Vector operations
-- `10_Apple_Silicon_Specific.s` - Apple Silicon features
-- `11_Security_Practices.s` - Security patterns
-
-**Location**: `Fundamentals/`  
-**Status**: ✅ 11 files, all tested and working
-
-### Advanced Techniques (Numerically Labelled)
-Advanced ARM64 assembly concepts for experienced developers:
-- `01_Atomic_Operations.s` - Atomic memory operations
-- `02_Memory_Barriers.s` - Memory ordering
-- `03_Advanced_SIMD.s` - Advanced vector operations
-- `04_Advanced_Control_Flow.s` - Control flow optimization
-- `05_Variadic_Functions.s` - Variable argument handling
-- `06_Advanced_Optimization.s` - Performance optimization
-- `07_Floating_Point_Advanced.s` - Advanced FP operations
-- `08_Advanced_Security.s` - Security features (ASLR, CFI, PAC)
-- `09_Advanced_Apple_Silicon.s` - Apple Silicon advanced features
-- `10_Advanced_Debugging.s` - Debugging techniques
-- `11_Advanced_Memory_Management.s` - Memory management patterns
-
-**Location**: `Advanced/`  
-**Status**: ✅ 11 files, all tested and working
-
-### Cheatsheets
-Quick reference guides for ARM64 assembly:
-- `01_ARM64_Opcodes.md` - Complete opcode reference with examples
-- `02_ARM64_Instruction_Set.md` - Comprehensive instruction set reference
-- `03_ARM64_Syscalls.md` - Linux syscall reference
-
-**Location**: `Cheatsheets/`  
-**Purpose**: Quick lookup for development and learning
-
-### Projects Portfolio
-Standalone ARM64 assembly projects demonstrating real-world applications. Projects are **not numerically labelled** and represent independent portfolio pieces.
-
-**Location**: `Projects/`  
-**Structure**: Each project is a complete, standalone implementation with its own documentation.
-
-**Current Projects**:
-- **Algorithms/** - 20 pure assembly algorithms + 14 C/Assembly interop implementations (34 total binaries)
-  - Graph algorithms (BFS, DFS)
-  - Search algorithms (Binary Search, Linear Search)
-  - Mathematical algorithms (Factorial, Fibonacci, GCD, LCM, Prime Check)
-  - String matching (KMP, Rabin-Karp)
-  - Dynamic programming (Knapsack, LCS)
-  - Tree algorithms (Tree Traversal)
-  - Sorting algorithms (Bubble, Heap, Insertion, Merge, Quick, Selection)
-- **Binutils/** - 14 ARM64 implementations of standard binary utilities (addr2line, ar, c++filt, elfedit, gprof, ld, nm, objcopy, objdump, ranlib, readelf, size, strings, strip)
-
----
-
-## 🏗️ Portfolio Structure
+The repository structure is organized around the authoritative `references/` directory, which defines all ARM64 concepts and serves as the source of truth for the entire codebase.
 
 ```
 HelloARM64/
-├── Fundamentals/          # Numerically-labelled reference (01-11)
-│   ├── 01_Registers.s
-│   ├── 02_Basic_Instructions.s
-│   ├── ...
-│   └── 11_Security_Practices.s
-├── Advanced/              # Numerically-labelled reference (01-11)
-│   ├── 01_Atomic_Operations.s
-│   ├── 02_Memory_Barriers.s
-│   ├── ...
-│   └── 11_Advanced_Memory_Management.s
-├── Cheatsheets/           # Quick reference guides
-│   ├── 01_ARM64_Opcodes.md
-│   ├── 02_ARM64_Instruction_Set.md
-│   ├── 03_ARM64_Syscalls.md
-│   └── README.md
-├── Projects/              # Standalone portfolio pieces (unlabelled)
-│   └── README.md
-├── bin/                   # Compiled binaries
-│   ├── fundamentals/      # 11 binaries
-│   └── advanced/          # 11 binaries
-├── Makefile               # Build system
-└── README.md              # This file
+├── README.md                    # This file
+├── LICENSE                       # License file
+├── .gitignore                   # Git ignore rules
+├── references/                  # ⭐ AUTHORITATIVE SOURCE - Complete reference documentation
+│   ├── index.md                 # Reference index and organization
+│   ├── arm_architecture.md      # ARMv8-A architecture fundamentals
+│   ├── instruction_set.md      # Complete A64 instruction set
+│   ├── registers_and_flags.md  # Register architecture and condition flags
+│   ├── memory_management.md    # Memory models and operations
+│   ├── mmu_and_translation.md  # MMU and address translation
+│   ├── calling_conventions.md  # AAPCS64 ABI standards
+│   ├── syscalls.md             # Linux and macOS syscall interfaces
+│   ├── debugging.md            # Debugging techniques and tools
+│   ├── performance.md          # Optimization strategies
+│   └── external_links.md       # Official ARM documentation links
+├── curriculum/                  # Structured learning curriculum (references references/)
+│   ├── 00_environment_setup/lesson.md
+│   ├── 01_registers_and_data/lesson.md
+│   ├── 02_instruction_basics/lesson.md
+│   ├── 03_control_flow/lesson.md
+│   ├── 04_memory_and_stack/lesson.md
+│   ├── 05_functions_and_abi/lesson.md
+│   ├── 06_syscalls/lesson.md
+│   ├── 07_debugging/lesson.md
+│   ├── 08_performance_and_optimization/lesson.md
+│   └── 09_virtual_memory_and_mmu/lesson.md
+├── examples/                     # Working code examples (aligned with references/)
+│   ├── linux_userspace/hello.s
+│   ├── interop_with_c/add.s, main.c
+│   ├── bare_metal/boot.s, exception_vectors.s, linker.ld, mmu_enable.s
+│   └── comparative_x86_64/calling_convention.md
+├── projects/                     # Complete projects (uses references/ concepts)
+│   ├── project_01_userspace_tool/
+│   ├── project_02_c_assembly_runtime/
+│   ├── project_03_bare_metal_firmware/
+│   └── project_04_performance_lab/
+├── assessments/                  # Learning assessments (based on references/)
+│   ├── quizzes/quiz.md
+│   ├── practical_tasks/tasks.md
+│   └── mastery_checklists.md
+├── tooling/                      # Development tooling guides
+│   ├── build_systems.md
+│   ├── gdb_workflows.md
+│   ├── emulator_vs_hardware.md
+│   └── cross_compilation.md
+└── meta/                         # Meta documentation
+    ├── learning_goals.md
+    ├── reference_mapping.md     # Maps curriculum/projects to references/
+    ├── design_principles.md
+    └── contribution_rules.md
 ```
 
----
+**All content in this repository is derived from and cross-referenced with the `references/` directory.**
 
-## 🚀 Building the Portfolio
+## 🚀 Quick Start
 
-### Build All References
+### Prerequisites
+
+- ARM64 toolchain (native or cross-compilation)
+- Linux or macOS system
+- GDB for debugging (optional but recommended)
+
+### Installation
+
+#### Linux (Native ARM64)
 ```bash
-# Build Fundamentals and Advanced references
-make all-examples
-
-# Or build separately
-make fundamentals    # Outputs to bin/fundamentals/
-make advanced        # Outputs to bin/advanced/
+sudo apt-get install gcc binutils gdb
 ```
 
-### Build Individual Files
+#### Linux (Cross-Compilation)
 ```bash
-# Build a specific Fundamentals file
-make bare file=Fundamentals/01_Registers.s
-
-# Build a specific Advanced file
-make bare file=Advanced/01_Atomic_Operations.s
+sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu gdb-multiarch qemu-user-static
 ```
 
-### Manual Compilation
+#### macOS (Apple Silicon)
 ```bash
-# Linux (AArch64)
-aarch64-linux-gnu-gcc -nostdlib -o bin/fundamentals/01_Registers Fundamentals/01_Registers.s
-aarch64-linux-gnu-gcc -nostdlib -o bin/advanced/01_Atomic_Operations Advanced/01_Atomic_Operations.s
-
-# macOS (Apple Silicon)
-clang -e _start -nostartfiles -o bin/fundamentals/01_Registers Fundamentals/01_Registers.s
-clang -e _start -nostartfiles -o bin/advanced/01_Atomic_Operations Advanced/01_Atomic_Operations.s
+xcode-select --install
 ```
 
----
+### First Program
 
-## 📊 Portfolio Statistics
+```bash
+# Compile
+aarch64-linux-gnu-gcc -nostdlib -o hello examples/linux_userspace/hello.s
 
-- **Fundamentals Reference**: 11 files, production-ready code
-- **Advanced Techniques**: 11 files, production-ready code
-- **Total Reference Code**: 22 files
-- **Projects/Algorithms**: 48 source files (20 pure assembly + 14 interop assembly + 14 interop C)
-- **Projects/Binutils**: 14 binary utility implementations
-- **Compiled Binaries**: 22 (Fundamentals/Advanced) + 34 (Algorithms) + 14 (Binutils) = 70 total
-- **Cheatsheets**: 3 comprehensive reference guides
-- **Projects**: Complete portfolio pieces with real-world applications
+# Run (native)
+./hello
 
----
-
-## 🔒 Code Quality
-
-All code in this portfolio is production-ready and follows industry best practices:
-
-- Production-ready, error-free implementations
-- Comprehensive security best practices
-- All memory accesses properly validated
-- All instructions correctly formatted
-- Well-structured, maintainable code
-- Input validation and bounds checking throughout
-- All code tested and verified
-- 100% compilation and execution success rate
-
----
+# Run (cross-compilation with QEMU)
+qemu-aarch64 ./hello
+```
 
 ## 📖 Learning Path
 
 ### For Beginners
-1. Start with **Fundamentals/** - Work through files 01-11 sequentially
-2. Reference **Cheatsheets/** for quick lookups
-3. Study code examples and patterns
-4. Build and test each file
 
-### For Advanced Developers
-1. Review **Advanced/** techniques (01-11)
-2. Study optimization patterns
-3. Examine security implementations
-4. Explore **Projects/** for real-world applications
+1. **Start with Environment Setup** (`curriculum/00_environment_setup/`)
+   - Set up development environment
+   - Compile and run first program
 
-### For Portfolio Reviewers
-- **Fundamentals/** and **Advanced/** demonstrate comprehensive knowledge
-- **Cheatsheets/** show documentation and reference skills
-- **Projects/** showcase independent project work
-- All code is production-ready and follows industry best practices
+2. **Learn Fundamentals** (Lessons 01-04)
+   - Registers and data
+   - Basic instructions
+   - Control flow
+   - Memory and stack
 
----
+3. **Progress to Intermediate** (Lessons 05-07)
+   - Functions and ABI
+   - System calls
+   - Debugging
 
-## 🛠️ Technologies & Tools
+4. **Advanced Topics** (Lessons 08-09)
+   - Performance optimization
+   - Virtual memory and MMU
 
-- **Architecture**: ARM64 (AArch64)
-- **Platforms**: Linux, Apple Silicon (macOS)
-- **Assembler**: GNU Assembler (gas)
-- **Compiler**: GCC/Clang
-- **Build System**: Make
-- **Testing**: QEMU (for cross-platform testing)
+### For Experienced Developers
 
----
+- Review reference documentation
+- Study working examples
+- Implement projects
+- Focus on optimization and advanced topics
 
-## 📚 Additional Resources
+## 📚 Reference Documentation
 
-- **Fundamentals/README.md** - Detailed Fundamentals documentation
-- **Advanced/README.md** - Detailed Advanced documentation
-- **Cheatsheets/README.md** - Cheatsheet index
-- **Projects/README.md** - Projects portfolio guide
-- **REFERENCES.md** - External learning resources
-- **CONTRIBUTING.md** - Contribution guidelines
+All reference documentation is derived from official ARM sources:
 
----
+- **ARMv8-A Architecture Reference Manual** (DDI0487)
+- **ARM A64 Instruction Set Architecture** (DDI0602)
+- **Procedure Call Standard for ARM 64-bit Architecture** (AAPCS64, IHI0055)
+- **ARM Developer Documentation Portal**
 
-## 🎓 Portfolio Highlights
+See `references/` directory for complete documentation.
 
-### Comprehensive Coverage
-- Complete ARM64 instruction set coverage
-- All major concepts from basics to advanced
-- Real-world patterns and best practices
+## 🛠️ Projects
 
-### Production Quality
-- All code compiles without errors
-- All code executes successfully
-- Comprehensive error handling
-- Security best practices throughout
+### Project 01: Userspace Tool
+Complete file copy utility demonstrating:
+- Command-line argument parsing
+- File I/O system calls
+- Error handling
+- Real system programming
 
-### Well Documented
-- Inline code comments
-- README files for each section
-- Cheatsheets for quick reference
-- Clear build instructions
+### Project 02: C/Assembly Runtime
+Runtime library functions in assembly:
+- Memory operations (memcpy, memset)
+- String operations (strlen, strcmp)
+- C/Assembly interoperation
+- ABI compliance
 
-### Professional Standards
-- Clean, maintainable code structure
-- Consistent coding style
-- Proper error handling
-- Security-conscious implementations
+### Project 03: Bare Metal Firmware
+Minimal firmware implementation:
+- Boot sequence
+- Exception vectors
+- MMU initialization
+- Low-level system control
 
----
+### Project 04: Performance Lab
+Performance analysis and optimization:
+- Benchmarking framework
+- Optimization techniques
+- Performance measurement
+- Analysis tools
 
-## 📝 License
+## 🧪 Examples
 
-See [LICENSE](LICENSE) file for details.
+### Linux Userspace
+- Hello World program
+- System call usage
+- Basic I/O operations
 
----
+### C/Assembly Interop
+- Calling assembly from C
+- Calling C from assembly
+- ABI compliance examples
+
+### Bare Metal
+- Boot code
+- Exception handlers
+- MMU setup
+- Linker scripts
+
+### Comparative x86-64
+- Calling convention comparison
+- Architecture differences
+- Porting considerations
+
+## 📝 Assessments
+
+### Quizzes
+Test knowledge of ARM64 concepts, instructions, and architecture.
+
+### Practical Tasks
+Hands-on exercises implementing real functionality:
+- Function implementations
+- Memory operations
+- System call wrappers
+- Optimization challenges
+
+### Mastery Checklists
+Track progress through four levels:
+- Level 1: Fundamentals
+- Level 2: Intermediate
+- Level 3: Advanced
+- Level 4: Expert
+
+## 🔧 Tooling
+
+### Build Systems
+- GNU Make examples
+- CMake configuration
+- Build automation
+
+### Debugging
+- GDB workflows
+- Common debugging scenarios
+- Best practices
+
+### Cross-Compilation
+- Toolchain setup
+- QEMU emulation
+- Development workflows
+
+## 📖 Curriculum
+
+### Lesson 00: Environment Setup
+Set up development environment and tools.
+
+### Lesson 01: Registers and Data
+Understand ARM64 register architecture and data operations.
+
+### Lesson 02: Instruction Basics
+Learn core ARM64 instructions and operations.
+
+### Lesson 03: Control Flow
+Implement branches, loops, and conditional execution.
+
+### Lesson 04: Memory and Stack
+Master memory operations and stack management.
+
+### Lesson 05: Functions and ABI
+Understand calling conventions and function implementation.
+
+### Lesson 06: System Calls
+Interface with operating system services.
+
+### Lesson 07: Debugging
+Debug ARM64 assembly programs effectively.
+
+### Lesson 08: Performance and Optimization
+Optimize code for performance.
+
+### Lesson 09: Virtual Memory and MMU
+Understand memory management and address translation.
+
+## 🎓 Learning Goals
+
+- Master ARM64 assembly language
+- Understand ARM architecture deeply
+- Apply real-world programming skills
+- Build complete, working systems
+
+See `meta/learning_goals.md` for detailed learning objectives.
+
+## 📋 Design Principles
+
+1. **No Abstraction**: Direct ARM64 assembly, no high-level abstractions
+2. **Reference-Based**: All concepts cited to official ARM documentation
+3. **Practical Focus**: Real, working code and buildable projects
+4. **Progressive Learning**: Structured path from basics to advanced
+5. **Complete Materialization**: No placeholders, full implementations
+
+See `meta/design_principles.md` for complete principles.
+
+## 🤝 Contributing
+
+Contributions welcome! See `meta/contribution_rules.md` for guidelines.
+
+### Requirements
+- ARM64 assembly code
+- Must compile and run
+- Follow AAPCS64 conventions
+- Include tests and documentation
+- Cite all references
+
+## 📚 References (Authoritative Source)
+
+**The `references/` directory is the authoritative source for all ARM64 concepts in this repository.**
+
+All content throughout the repository (curriculum, examples, projects, assessments) is derived from and cross-referenced with the `references/` directory, which itself cites:
+- ARMv8-A Architecture Reference Manual (DDI0487)
+- ARM A64 Instruction Set Architecture (DDI0602)
+- Procedure Call Standard for ARM 64-bit Architecture (AAPCS64, IHI0055)
+- ARM Developer Documentation Portal
+- Official ARM tutorials and guides
+
+See `references/external_links.md` for complete reference list.
+
+## 🏗️ Building
+
+### Individual Examples
+```bash
+aarch64-linux-gnu-gcc -nostdlib -o hello examples/linux_userspace/hello.s
+```
+
+### Projects
+Each project includes build instructions in its directory.
+
+### Using Make
+See `tooling/build_systems.md` for Makefile examples.
+
+## 🐛 Debugging
+
+### GDB Basics
+```bash
+gdb ./program
+(gdb) break _start
+(gdb) run
+(gdb) stepi
+(gdb) info registers
+```
+
+See `tooling/gdb_workflows.md` for complete debugging guide.
+
+## 📊 Repository Statistics
+
+- **Reference Documents**: 11 comprehensive references
+- **Curriculum Lessons**: 10 progressive lessons
+- **Working Examples**: 8+ complete examples
+- **Projects**: 4 complete, buildable projects
+- **Assessments**: Quizzes, tasks, and checklists
+- **Tooling Guides**: 4 development guides
+
+## ✅ Completion Status
+
+- ✅ Complete reference documentation
+- ✅ Full curriculum (10 lessons)
+- ✅ Working examples
+- ✅ Complete projects
+- ✅ Assessments and checklists
+- ✅ Tooling documentation
+- ✅ Meta documentation
+
+## 📄 License
+
+See LICENSE file for details.
 
 ## 🔗 Quick Links
 
-- [Fundamentals Reference](./Fundamentals/) - Core concepts (11 files)
-- [Advanced Techniques](./Advanced/) - Advanced patterns (11 files)
-- [Cheatsheets](./Cheatsheets/) - Quick reference guides
-- [Projects Portfolio](./Projects/) - Standalone projects
-- [References](./REFERENCES.md) - External resources
+- [References](./references/) - Complete ARM64 reference documentation
+- [Curriculum](./curriculum/) - Structured learning path
+- [Examples](./examples/) - Working code examples
+- [Projects](./projects/) - Complete projects
+- [Assessments](./assessments/) - Learning assessments
+- [Tooling](./tooling/) - Development tools and workflows
 
 ---
 
-**Portfolio Status**: ✅ Complete and Production-Ready  
-**Last Updated**: All files tested and verified  
-**Code Quality**: 100% compilation and execution success rate
+**Status**: ✅ Complete and Production-Ready  
+**Last Updated**: All files materialized with full content  
+**Code Quality**: 100% compilation-ready, reference-cited, ABI-compliant
