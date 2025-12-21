@@ -20,6 +20,14 @@ __pycache__/
 *.o
 *.a
 *.so
+*.bin
+*.elf
+# Project build outputs
+projects/*/cp_tool
+projects/*/test_program
+projects/*/benchmarks
+projects/*/firmware.bin
+projects/*/firmware.elf
 
 # Editor files
 .vscode/

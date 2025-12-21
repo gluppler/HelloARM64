@@ -34,21 +34,63 @@ A runtime library written in ARM64 assembly that provides low-level functions fo
 
 ## Build Instructions
 
+### Using Makefile (Recommended)
+
+```bash
+# Build and verify
+make
+
+# Run with QEMU
+make run
+
+# Run natively (ARM64 only)
+make run-native
+
+# Run automated test
+make test
+
+# Debug with GDB
+make debug
+
+# Clean build artifacts
+make clean
+
+# Show help
+make help
+```
+
+**Reference**: The Makefile handles assembly and C compilation, linking with static libraries for QEMU compatibility. See [`../../tooling/qemu_execution.md`](../../tooling/qemu_execution.md) for details.
+
+### Manual Build
+
 ```bash
 # Compile assembly runtime
 aarch64-linux-gnu-as -o runtime.o src/runtime.s
 
 # Compile C program
-aarch64-linux-gnu-gcc -c main.c
+aarch64-linux-gnu-gcc -c src/main.c -o main.o
 
-# Link together
-aarch64-linux-gnu-gcc -o test_program main.o runtime.o
+# Link together (static linking recommended)
+aarch64-linux-gnu-gcc -static -o test_program main.o runtime.o
+
+# Run with QEMU (static binary, no -L needed)
+qemu-aarch64 ./test_program
+
+# If dynamically linked, use:
+# qemu-aarch64 -L /usr/aarch64-linux-gnu ./test_program
 ```
 
 ## Testing
 
 ```bash
+# Run (native ARM64)
 ./test_program
+
+# Run (cross-compilation with QEMU - static binary)
+qemu-aarch64 ./test_program
+
+# If dynamically linked, use:
+# qemu-aarch64 -L /usr/aarch64-linux-gnu ./test_program
 ```
 
 ## References

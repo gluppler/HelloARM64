@@ -57,6 +57,8 @@ This document maps all curriculum lessons and projects to their corresponding re
 ### Project 04: Performance Lab
 - references/performance.md
 - references/instruction_set.md
+- references/syscalls.md (for clock_gettime timing)
+- references/arm_architecture.md (for architecture fundamentals)
 
 ## External References
 

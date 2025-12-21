@@ -35,15 +35,47 @@ A complete ARM64 assembly implementation of a simple file copy utility (`cp`-lik
 
 ## Build Instructions
 
+### Using Makefile (Recommended)
+
 ```bash
-# Compile
-aarch64-linux-gnu-gcc -nostdlib -o cp_tool src/main.s
+# Build and verify
+make
+
+# Run automated test
+make test
+
+# Run with custom arguments
+make run ARGS='source.txt dest.txt'
+
+# Run natively (ARM64 only)
+make run-native ARGS='source.txt dest.txt'
+
+# Debug with GDB
+make debug ARGS='source.txt dest.txt'
+
+# Clean build artifacts
+make clean
+
+# Show help
+make help
+```
+
+**Reference**: The Makefile uses static linking for QEMU compatibility. See [`../../tooling/qemu_execution.md`](../../tooling/qemu_execution.md) for details.
+
+### Manual Build
+
+```bash
+# Compile (static linking - no dynamic libraries needed)
+aarch64-linux-gnu-gcc -nostdlib -static -o cp_tool src/main.s
 
 # Run (native ARM64)
 ./cp_tool source.txt dest.txt
 
-# Run (cross-compilation with QEMU)
+# Run (cross-compilation with QEMU - static binary, no -L needed)
 qemu-aarch64 ./cp_tool source.txt dest.txt
+
+# Alternative: If you need dynamic linking, install ARM64 rootfs and use:
+# qemu-aarch64 -L /usr/aarch64-linux-gnu ./cp_tool source.txt dest.txt
 ```
 
 ## Testing

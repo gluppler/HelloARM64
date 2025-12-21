@@ -139,17 +139,26 @@ _start:
 
 #### Linux (Native or Cross-Compilation)
 ```bash
-# Native ARM64
-gcc -nostdlib -o hello hello.s
+# Native ARM64 (static linking)
+gcc -nostdlib -static -o hello hello.s
 
-# Cross-compilation
-aarch64-linux-gnu-gcc -nostdlib -o hello hello.s
+# Cross-compilation (static linking - recommended)
+aarch64-linux-gnu-gcc -nostdlib -static -o hello hello.s
+
+# Verify static linking
+file hello
+# Should show: "statically linked"
 
 # Run (native)
 ./hello
 
-# Run (cross-compilation with QEMU)
+# Run (cross-compilation with QEMU - static binary, no -L needed)
 qemu-aarch64 ./hello
+
+# If you need dynamic linking (not recommended for simple programs):
+# 1. Compile without -static
+# 2. Install ARM64 rootfs: sudo apt-get install qemu-user-binfmt
+# 3. Or use: qemu-aarch64 -L /usr/aarch64-linux-gnu ./hello
 ```
 
 #### macOS (Apple Silicon)

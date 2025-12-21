@@ -56,13 +56,16 @@ gcc -nostdlib -o program program.s
 
 ### Cross-Compilation
 ```bash
-aarch64-linux-gnu-gcc -nostdlib -o program program.s
+# Static linking (recommended for QEMU execution)
+aarch64-linux-gnu-gcc -nostdlib -static -o program program.s
 ```
 
 ### With Debugging
 ```bash
-aarch64-linux-gnu-gcc -g -nostdlib -o program program.s
+aarch64-linux-gnu-gcc -g -nostdlib -static -o program program.s
 ```
+
+**Note**: See [`qemu_execution.md`](./qemu_execution.md) for QEMU execution details and troubleshooting.
 
 ## References
 

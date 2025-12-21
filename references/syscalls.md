@@ -43,6 +43,7 @@ Common Linux system calls for ARM64:
 - **93**: exit
 - **94**: exit_group
 - **103**: nanosleep
+- **113**: clock_gettime
 - **160**: uname
 - **169**: gettimeofday
 - **220**: clone
@@ -119,6 +120,21 @@ MOV  X0, #new_brk          // new break address (0 to get current)
 SVC  #0                    // Make system call
 // X0 = new break address
 ```
+
+#### clock_gettime (113)
+```assembly
+// Get current time with high resolution
+// X0 = clock_id (1 = CLOCK_MONOTONIC, 0 = CLOCK_REALTIME)
+// X1 = pointer to timespec structure (16 bytes: 8 bytes tv_sec, 8 bytes tv_nsec)
+MOV  X8, #113             // sys_clock_gettime
+MOV  X0, #1                // CLOCK_MONOTONIC (monotonic time, not affected by system clock changes)
+ADR  X1, timespec          // Address of timespec structure
+SVC  #0                    // Make system call
+// Result stored in timespec structure at X1
+// X0 = 0 on success, negative on error
+```
+
+**Reference**: Linux kernel documentation, POSIX clock_gettime(2)
 
 ### Error Handling
 

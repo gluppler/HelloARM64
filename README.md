@@ -102,14 +102,17 @@ xcode-select --install
 ### First Program
 
 ```bash
-# Compile
-aarch64-linux-gnu-gcc -nostdlib -o hello examples/linux_userspace/hello.s
+# Compile (static linking - recommended)
+aarch64-linux-gnu-gcc -nostdlib -static -o hello examples/linux_userspace/hello.s
 
 # Run (native)
 ./hello
 
-# Run (cross-compilation with QEMU)
+# Run (cross-compilation with QEMU - static binary, no -L needed)
 qemu-aarch64 ./hello
+
+# If dynamically linked, use:
+# qemu-aarch64 -L /usr/aarch64-linux-gnu ./hello
 ```
 
 ## 📖 Learning Path
@@ -241,6 +244,12 @@ Track progress through four levels:
 - Toolchain setup
 - QEMU emulation
 - Development workflows
+
+### QEMU Execution
+- Static vs dynamic linking
+- Library path configuration
+- Troubleshooting exec errors
+- See [`tooling/qemu_execution.md`](./tooling/qemu_execution.md) for complete guide
 
 ## 📖 Curriculum
 

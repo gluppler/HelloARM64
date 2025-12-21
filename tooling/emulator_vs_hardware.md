@@ -17,8 +17,16 @@
 
 ### Usage
 ```bash
+# For static binaries (recommended)
 qemu-aarch64 ./program
+
+# For dynamic binaries (requires library path)
+qemu-aarch64 -L /usr/aarch64-linux-gnu ./program
 ```
+
+### Static vs Dynamic Linking
+- **Static linking** (`-static` flag): No library dependencies, works directly with QEMU
+- **Dynamic linking**: Requires ARM64 library path with `-L` flag or binfmt support
 
 ## Native Hardware
 
